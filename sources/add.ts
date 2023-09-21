@@ -72,7 +72,7 @@ function addTerms(terms: U[]): U {
     if (!hasCombinableTerms) {
       break;
     }
-    combineTerms(terms);
+    terms = combineTerms(terms);
   }
 
   switch (terms.length) {
@@ -170,97 +170,83 @@ function unwrapMultiply(p: U): U {
 /*
  Compare adjacent terms in terms[] and combine if possible.
 */
-function combineTerms(terms: U[]): void {
-  // I had to turn the coffeescript for loop into
-  // a more mundane while loop because the i
-  // variable was changed from within the body,
-  // which is something that is not supposed to
-  // happen in the coffeescript 'vector' form.
-  // Also this means I had to add a 'i++' jus before
-  // the end of the body and before the "continue"s
-  let i = 0;
-  while (i < terms.length - 1) {
+function combineTerms(terms: U[]): U[] {
+  const evaluated: U[] = [];
+  const remaining: U[] = [...terms];
+  while (remaining.length > 1) {
     check_esc_flag();
-    let p1: U, p2: U;
-    let p3 = terms[i];
-    let p4 = terms[i + 1];
-
-    if (istensor(p3) && istensor(p4)) {
-      const added = tensor_plus_tensor(p3, p4);
+    let p1 = remaining.shift();
+    let p2 = remaining.shift();
+    if (istensor(p1) && istensor(p2)) {
+      const added = tensor_plus_tensor(p1, p2);
       if (added !== symbol(NIL)) {
-        terms.splice(i, 2, added);
-        i--;
+        evaluated.push(added);
+        continue;
       }
-      i++;
-      continue;
-    }
-
-    if (istensor(p3) || istensor(p4)) {
-      i++;
-      continue;
-    }
-
-    if (isNumericAtom(p3) && isNumericAtom(p4)) {
-      const added = add_numbers(p3, p4);
-      if (isZeroAtomOrTensor(added)) {
-        terms.splice(i, 2);
-      } else {
-        terms.splice(i, 2, added);
+      evaluated.push(p1);
+      remaining.unshift(p2);
+    } else if (istensor(p1) || istensor(p2)) {
+      evaluated.push(p1);
+      remaining.unshift(p2);
+    } else if (isNumericAtom(p1) && isNumericAtom(p2)) {
+      const added = add_numbers(p1, p2);
+      if (!isZeroAtomOrTensor(added)) {
+        remaining.unshift(added)
       }
       continue;
-    }
-
-    if (isNumericAtom(p3) || isNumericAtom(p4)) {
-      i++;
-      continue;
-    }
-
-    p1 = Constants.One();
-    p2 = Constants.One();
-
-    let t = 0;
-
-    if (ismultiply(p3)) {
-      p3 = cdr(p3);
-      t = 1; // p3 is now denormal
-      if (isNumericAtom(car(p3))) {
-        p1 = car(p3);
-        p3 = cdr(p3);
-        if (cdr(p3) === symbol(NIL)) {
-          p3 = car(p3);
-          t = 0;
-        }
+    } else if (isNumericAtom(p1) || isNumericAtom(p2)) {
+      evaluated.push(p1);
+      remaining.unshift(p2);
+    } else {
+      let d1: U = Constants.One();
+      let d2: U = Constants.One();
+      let p1a: U = p1
+      let p2a: U = p2;
+      let t = false;
+      if (ismultiply(p1)) {
+        [p1a, d1, t] = needDescriptiveFunctionName(p1)
       }
-    }
 
-    if (ismultiply(p4)) {
-      p4 = cdr(p4);
-      if (isNumericAtom(car(p4))) {
-        p2 = car(p4);
-        p4 = cdr(p4);
-        if (cdr(p4) === symbol(NIL)) {
-          p4 = car(p4);
-        }
+      if (ismultiply(p2)) {
+        let _ = false;
+        [p2a, d2, _] = needDescriptiveFunctionName(p2);
       }
+
+      if (!equal(p1a, p2a)) {
+        evaluated.push(p1);
+        remaining.unshift(p2);
+        continue;
+      }
+
+      d1 = add_numbers(d1 as Num | Double, d2 as Num | Double);
+
+      if (isZeroAtomOrTensor(d1)) {
+        continue;
+      }
+
+      const arg2 = t ? new Cons(symbol(MULTIPLY), p1a) : p1a;
+      const result = multiply(d1, arg2);
+      remaining.unshift(result);
     }
-
-    if (!equal(p3, p4)) {
-      i++;
-      continue;
-    }
-
-    p1 = add_numbers(p1 as Num | Double, p2 as Num | Double);
-
-    if (isZeroAtomOrTensor(p1)) {
-      terms.splice(i, 2);
-      continue;
-    }
-
-    const arg2 = t ? new Cons(symbol(MULTIPLY), p3) : p3;
-
-    terms.splice(i, 2, multiply(p1, arg2));
   }
+  return [...evaluated, ...remaining];
 }
+
+function needDescriptiveFunctionName(p: U): [U, U, boolean] {
+  let n: U = Constants.One();
+  p = cdr(p);
+  let t = true; // p is now denormal
+  if (isNumericAtom(car(p))) {
+    n = car(p);
+    p = cdr(p);
+    if (cdr(p) === symbol(NIL)) {
+      p = car(p);
+      t = false;
+    }
+  }
+  return [p, n, t];
+}
+
 
 function pushTerms(array: U[], p: U) {
   if (isadd(p)) {

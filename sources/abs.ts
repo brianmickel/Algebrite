@@ -93,8 +93,6 @@ Notes
      automatic.
 */
 
-const DEBUG_ABS = false;
-
 export function Eval_abs(p1: U) {
     return abs(Eval(cadr(p1)));
 }
@@ -111,60 +109,24 @@ export function absValFloat(p1: U): U {
 //  stop("absValFloat should return a double and instead got: " + stack[tos-1])
 
 export function abs(p1: U): U {
-  const numer = numerator(p1);
-  const absNumer = absval(numer);
-  const denom = denominator(p1);
-  const absDenom = absval(denom);
-  const result = divide(absNumer, absDenom);
-
-  if (DEBUG_ABS) {
-    console.trace('>>>>  ABS of ' + p1);
-    console.log(`ABS numerator ${numer}`);
-    console.log(`ABSVAL numerator: ${absNumer}`);
-    console.log(`ABS denominator: ${denom}`);
-    console.log(`ABSVAL denominator: ${absDenom}`);
-    console.log(`ABSVAL divided: ${result}`);
-    console.log('<<<<<<<  ABS');
-  }
-  return result;
+  return divide(absval(numerator(p1)), absval(denominator(p1)));
 }
 
 export function absval(p1: U): U {
-  const input = p1;
-
-  if (DEBUG_ABS) {
-    console.log(`ABS of ${p1}`);
-  }
-
   // handle all the "number" cases first -----------------------------------------
   if (isZeroAtomOrTensor(p1)) {
-    if (DEBUG_ABS) {
-      console.log(` abs: ${p1} just zero`);
-      console.log(' --> ABS of ' + input + ' : ' + Constants.zero);
-    }
     return Constants.zero;
   }
 
   if (isnegativenumber(p1)) {
-    if (DEBUG_ABS) {
-      console.log(` abs: ${p1} just a negative`);
-    }
     return negate(p1);
   }
 
   if (ispositivenumber(p1)) {
-    if (DEBUG_ABS) {
-      console.log(` abs: ${p1} just a positive`);
-      console.log(` --> ABS of ${input} : ${p1}`);
-    }
     return p1;
   }
 
   if (p1 === symbol(PI)) {
-    if (DEBUG_ABS) {
-      console.log(` abs: ${p1} of PI`);
-      console.log(` --> ABS of ${input} : ${p1}`);
-    }
     return p1;
   }
 
@@ -175,7 +137,7 @@ export function absval(p1: U): U {
   // we catch the "add", "power", "multiply" cases first,
   // before falling back to the
   // negative/positive cases because there are some
-  // simplification thay we might be able to do.
+  // simplification that we might be able to do.
   // Note that for this routine to give a correct result, this
   // must be a sum where a complex number appears.
   // If we apply this to "a+b", we get an incorrect result.
@@ -185,10 +147,6 @@ export function absval(p1: U): U {
       findPossibleExponentialForm(p1) ||
       Find(p1, Constants.imaginaryunit))
   ) {
-    if (DEBUG_ABS) {
-      console.log(` abs: ${p1} is a sum`);
-      console.log('abs of a sum');
-    }
     // sum
     p1 = rect(p1); // convert polar terms, if any
 
@@ -202,67 +160,32 @@ export function absval(p1: U): U {
         rational(1, 2)
       )
     );
-    if (DEBUG_ABS) {
-      console.log(` --> ABS of ${input} : ${result}`);
-    }
     return result;
   }
 
+  // -1 to any power
   if (ispower(p1) && equaln(cadr(p1), -1)) {
-    // -1 to any power
-    const one = Constants.One();
-
-    if (DEBUG_ABS) {
-      console.log(` abs: ${p1} is -1 to any power`);
-      const msg = defs.evaluatingAsFloats
-        ? ' abs: numeric, so result is 1.0'
-        : ' abs: symbolic, so result is 1';
-      console.log(msg);
-      console.log(` --> ABS of ${input} : ${one}`);
-    }
-
-    return one;
+    return Constants.One();
   }
 
   // abs(a^b) is equal to abs(a)^b IF b is positive
   if (ispower(p1) && ispositivenumber(caddr(p1))) {
-    const result = power(abs(cadr(p1)), caddr(p1));
-    if (DEBUG_ABS) {
-      console.log(` abs: ${p1} is something to the power of a positive number`);
-      console.log(` --> ABS of ${input} : ${result}`);
-    }
-    return result;
+    return power(abs(cadr(p1)), caddr(p1));
   }
 
-  // abs(e^something)
+  // exponential: abs(e^something)
   if (ispower(p1) && cadr(p1) === symbol(E)) {
-    // exponential
-    const result = exponential(real(caddr(p1)));
-    if (DEBUG_ABS) {
-      console.log(` abs: ${p1} is an exponential`);
-      console.log(` --> ABS of ${input} : ${result}`);
-    }
-    return result;
+    return exponential(real(caddr(p1)));
   }
 
+  // product
   if (ismultiply(p1)) {
-    // product
-    const result = p1.tail().map(absval).reduce(multiply);
-
-    if (DEBUG_ABS) {
-      console.log(` abs: ${p1} is a product`);
-      console.log(` --> ABS of ${input} : ${result}`);
-    }
-    return result;
+    return p1.tail().map(absval).reduce(multiply);
   }
 
+  // abs(abs(...))
   if (car(p1) === symbol(ABS)) {
-    const absOfAbs = makeList(symbol(ABS), cadr(p1));
-    if (DEBUG_ABS) {
-      console.log(` abs: ${p1} is abs of a abs`);
-      console.log(` --> ABS of ${input} : ${absOfAbs}`);
-    }
-    return absOfAbs;
+    return makeList(symbol(ABS), cadr(p1));
   }
 
   /*
@@ -277,23 +200,6 @@ export function absval(p1: U): U {
   * to see if we end up with a number, which would mean that there
   * is no imaginary component and we can just return the input
   * (or its negation) as the result.
-  push p1
-  zzfloat()
-  floatEvaluation = pop()
-
-  if (isnegativenumber(floatEvaluation))
-    if DEBUG_ABS then console.log " abs: " + p1 + " just a negative"
-    push(p1)
-    negate()
-    restore()
-    return
-
-  if (ispositivenumber(floatEvaluation))
-    if DEBUG_ABS then console.log " abs: " + p1 + " just a positive"
-    push(p1)
-    if DEBUG_ABS then console.log " --> ABS of " + input + " : " + stack[tos-1]
-    restore()
-    return
   */
 
   if (istensor(p1)) {
@@ -304,12 +210,7 @@ export function absval(p1: U): U {
     p1 = negate(p1);
   }
 
-  const l = makeList(symbol(ABS), p1);
-  if (DEBUG_ABS) {
-    console.log(` abs: ${p1} is nothing decomposable`);
-    console.log(` --> ABS of ${input} : ${l}`);
-  }
-  return l;
+  return makeList(symbol(ABS), p1);
 }
 
 // also called the "norm" of a vector

@@ -4,7 +4,6 @@ import {
   cdr,
   Cons,
   Constants,
-  DEBUG,
   Double,
   isadd,
   ismultiply,
@@ -14,6 +13,7 @@ import {
   NIL,
   Num,
   Sign,
+  Tensor,
   U
 } from '../runtime/defs';
 import { check_esc_flag } from '../runtime/run';
@@ -24,7 +24,6 @@ import { isZeroAtom, isZeroAtomOrTensor } from './is';
 import { makeList } from './list';
 import { cmp_expr, equal } from './misc';
 import { multiply, negate } from './multiply';
-import { print_list } from './print';
 import { tensor_plus_tensor } from './tensor';
 
 /*
@@ -57,33 +56,23 @@ export function Eval_add(p1: Cons) {
   p1 = cdr(p1) as Cons;
   for (const t of p1) {
     const p2 = Eval(t);
-    push_terms(terms, p2);
+    pushTerms(terms, p2);
   }
-  return add_terms(terms);
+  return addTerms(terms);
 }
 
 // Add terms, returns one expression.
-function add_terms(terms: U[]): U {
+function addTerms(terms: U[]): U {
   // ensure no infinite loop, use "for"
-  if (DEBUG) {
-    for (const term of terms) {
-      console.log(print_list(term));
-    }
-  }
 
-  for (let i = 0; i < 10; i++) {
-    if (terms.length < 2) {
+  let i = 0;
+  let hasCombinableTerms = true;
+  while (i < 10 && terms.length > 1) {
+    hasCombinableTerms = sortInPlace(terms);
+    if (!hasCombinableTerms) {
       break;
     }
-
-    flag = 0;
-    terms.sort(cmp_terms);
-
-    if (flag === 0) {
-      break;
-    }
-
-    combine_terms(terms);
+    combineTerms(terms);
   }
 
   switch (terms.length) {
@@ -97,82 +86,91 @@ function add_terms(terms: U[]): U {
   }
 }
 
-let cmp_terms_count = 0;
+/**
+ * Sorts an array of terms in place and checks if there are any combinable terms.
+ *
+ * @param {U[]} terms - The array of terms to be sorted.
+ * @return {boolean} - Returns true if there are any combinable terms, otherwise false.
+ */
+function sortInPlace(terms: U[]): boolean {
+  let hasCombinableTerms = false;
+  const wrappedCompareTerms = (p1: U, p2: U): Sign => {
+    const result = compareTerms(p1, p2);
+    if (result === 0) {
+      hasCombinableTerms = true;
+    }
+    return result;
+  }
+
+  terms.sort(wrappedCompareTerms);
+  return hasCombinableTerms;
+}
 
 // Compare terms for order.
-function cmp_terms(p1: U, p2: U): Sign {
-  cmp_terms_count++;
-  //if cmp_terms_count == 52
-  //  breakpoint
-
+function compareTerms(p1: U, p2: U): Sign {
   // numbers can be combined
-
   if (isNumericAtom(p1) && isNumericAtom(p2)) {
-    flag = 1;
-    //if DEBUG then console.log "cmp_terms #" + cmp_terms_count + " returns 0"
     return 0;
   }
 
   // congruent tensors can be combined
-
   if (istensor(p1) && istensor(p2)) {
-    if (p1.tensor.ndim < p2.tensor.ndim) {
-      //if DEBUG then console.log "cmp_terms #" + cmp_terms_count + " returns -1"
-      return -1;
-    }
-    if (p1.tensor.ndim > p2.tensor.ndim) {
-      //if DEBUG then console.log "cmp_terms #" + cmp_terms_count + " returns 1"
-      return 1;
-    }
-    for (let i = 0; i < p1.tensor.ndim; i++) {
-      if (p1.tensor.dim[i] < p2.tensor.dim[i]) {
-        //if DEBUG then console.log "cmp_terms #" + cmp_terms_count + " returns -1"
-        return -1;
-      }
-      if (p1.tensor.dim[i] > p2.tensor.dim[i]) {
-        //if DEBUG then console.log "cmp_terms #" + cmp_terms_count + " returns 1"
-        return 1;
-      }
-    }
-    flag = 1;
-    //if DEBUG then console.log "cmp_terms #" + cmp_terms_count + " returns 0"
-    return 0;
+    return compareTensorDimensions(p1, p2);
   }
 
   if (ismultiply(p1)) {
-    p1 = cdr(p1);
-    if (isNumericAtom(car(p1))) {
-      p1 = cdr(p1);
-      if (cdr(p1) === symbol(NIL)) {
-        p1 = car(p1);
-      }
-    }
+    p1 = unwrapMultiply(p1);
   }
 
   if (ismultiply(p2)) {
-    p2 = cdr(p2);
-    if (isNumericAtom(car(p2))) {
-      p2 = cdr(p2);
-      if (cdr(p2) === symbol(NIL)) {
-        p2 = car(p2);
-      }
+    p2 = unwrapMultiply(p2);
+  }
+
+  return cmp_expr(p1, p2);
+}
+
+
+/**
+ * Compares the dimensions of two tensors and returns a sign indicating their relative sizes.
+ *
+ * @param {Tensor<U>} t1 - The first tensor to compare.
+ * @param {Tensor<U>} t2 - The second tensor to compare.
+ * @return {Sign} The sign indicating the relative sizes of the tensors. Returns -1 if t1 is smaller, 1 if t2 is smaller, and 0 if they have the same size.
+ */
+function compareTensorDimensions(t1: Tensor<U>, t2: Tensor<U>): Sign {
+  if (t1.tensor.ndim < t2.tensor.ndim) {
+    return -1;
+  }
+  if (t1.tensor.ndim > t2.tensor.ndim) {
+    return 1;
+  }
+  for (let i = 0; i < t1.tensor.ndim; i++) {
+    if (t1.tensor.dim[i] < t2.tensor.dim[i]) {
+      return -1;
+    }
+    if (t1.tensor.dim[i] > t2.tensor.dim[i]) {
+      return 1;
     }
   }
+  return 0;
+}
 
-  const t = cmp_expr(p1, p2);
-
-  if (t === 0) {
-    flag = 1;
+function unwrapMultiply(p: U): U {
+  p = cdr(p);
+  if (!isNumericAtom(car(p))) {
+    return p;
   }
-
-  //if DEBUG then console.log "cmp_terms #" + cmp_terms_count + " returns " + t
-  return t;
+  p = cdr(p);
+  if (cdr(p) !== symbol(NIL)) {
+    return p;
+  }
+  return car(p)
 }
 
 /*
  Compare adjacent terms in terms[] and combine if possible.
 */
-function combine_terms(terms: U[]) {
+function combineTerms(terms: U[]): void {
   // I had to turn the coffeescript for loop into
   // a more mundane while loop because the i
   // variable was changed from within the body,
@@ -188,12 +186,11 @@ function combine_terms(terms: U[]) {
     let p4 = terms[i + 1];
 
     if (istensor(p3) && istensor(p4)) {
-      p1 = tensor_plus_tensor(p3, p4);
-      if (p1 !== symbol(NIL)) {
-        terms.splice(i, 2, p1);
+      const added = tensor_plus_tensor(p3, p4);
+      if (added !== symbol(NIL)) {
+        terms.splice(i, 2, added);
         i--;
       }
-
       i++;
       continue;
     }
@@ -204,15 +201,12 @@ function combine_terms(terms: U[]) {
     }
 
     if (isNumericAtom(p3) && isNumericAtom(p4)) {
-      p1 = add_numbers(p3, p4);
-      if (isZeroAtomOrTensor(p1)) {
+      const added = add_numbers(p3, p4);
+      if (isZeroAtomOrTensor(added)) {
         terms.splice(i, 2);
       } else {
-        terms.splice(i, 2, p1);
+        terms.splice(i, 2, added);
       }
-      i--;
-
-      i++;
       continue;
     }
 
@@ -259,23 +253,16 @@ function combine_terms(terms: U[]) {
 
     if (isZeroAtomOrTensor(p1)) {
       terms.splice(i, 2);
-      i--;
-
-      i++;
       continue;
     }
 
     const arg2 = t ? new Cons(symbol(MULTIPLY), p3) : p3;
 
     terms.splice(i, 2, multiply(p1, arg2));
-    i--;
-
-    // this i++ is to match the while
-    i++;
   }
 }
 
-function push_terms(array: U[], p: U) {
+function pushTerms(array: U[], p: U) {
   if (isadd(p)) {
     array.push(...p.tail());
   } else if (!isZeroAtom(p)) {
@@ -287,17 +274,17 @@ function push_terms(array: U[], p: U) {
 // add two expressions
 export function add(p1: U, p2: U): U {
   const terms: U[] = [];
-  push_terms(terms, p1);
-  push_terms(terms, p2);
-  return add_terms(terms);
+  pushTerms(terms, p1);
+  pushTerms(terms, p2);
+  return addTerms(terms);
 }
 
 export function add_all(terms: U[]): U {
   const flattened: U[] = [];
   for (const t of terms) {
-    push_terms(flattened, t);
+    pushTerms(flattened, t);
   }
-  return add_terms(flattened);
+  return addTerms(flattened);
 }
 
 export function subtract(p1: U, p2: U): U {

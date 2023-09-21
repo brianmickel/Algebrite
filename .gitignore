@@ -5,13 +5,13 @@ bazel-out
 **/.DS_Store
 
 dist/*
-!dist/algebrite.js
-!dist/algebrite.bundle-for-browser-min.js
-!dist/algebrite.bundle-for-browser.js
-!dist/index.js
+# !dist/algebrite.js
+# !dist/algebrite.bundle-for-browser-min.js
+# !dist/algebrite.bundle-for-browser.js
+# !dist/index.js
 
-!dist/runtime
-!dist/sources
+# !dist/runtime
+# !dist/sources
 
-!dist/runtime/*
-!dist/sources/*
+# !dist/runtime/*
+# !dist/sources/*

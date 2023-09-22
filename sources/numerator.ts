@@ -8,7 +8,7 @@ import {
   ismultiply,
   ispower,
   isrational,
-  U
+  U,
 } from '../runtime/defs';
 import { mp_numerator } from './bignum';
 import { Eval } from './eval';

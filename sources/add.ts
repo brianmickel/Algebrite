@@ -14,10 +14,10 @@ import {
   Num,
   Sign,
   Tensor,
-  U
+  U,
 } from '../runtime/defs';
 import { check_esc_flag } from '../runtime/run';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { add_numbers } from './bignum';
 import { Eval } from './eval';
 import { isZeroAtom, isZeroAtomOrTensor } from './is';
@@ -100,7 +100,7 @@ function sortInPlace(terms: U[]): boolean {
       hasCombinableTerms = true;
     }
     return result;
-  }
+  };
 
   terms.sort(wrappedCompareTerms);
   return hasCombinableTerms;
@@ -128,7 +128,6 @@ function compareTerms(p1: U, p2: U): Sign {
 
   return cmp_expr(p1, p2);
 }
-
 
 /**
  * Compares the dimensions of two tensors and returns a sign indicating their relative sizes.
@@ -164,7 +163,7 @@ function unwrapMultiply(p: U): U {
   if (cdr(p) !== symbol(NIL)) {
     return p;
   }
-  return car(p)
+  return car(p);
 }
 
 /*
@@ -191,7 +190,7 @@ function combineTerms(terms: U[]): U[] {
     } else if (isNumericAtom(p1) && isNumericAtom(p2)) {
       const added = add_numbers(p1, p2);
       if (!isZeroAtomOrTensor(added)) {
-        remaining.unshift(added)
+        remaining.unshift(added);
       }
       continue;
     } else if (isNumericAtom(p1) || isNumericAtom(p2)) {
@@ -200,11 +199,11 @@ function combineTerms(terms: U[]): U[] {
     } else {
       let d1: U = Constants.One();
       let d2: U = Constants.One();
-      let p1a: U = p1
+      let p1a: U = p1;
       let p2a: U = p2;
       let t = false;
       if (ismultiply(p1)) {
-        [p1a, d1, t] = needDescriptiveFunctionName(p1)
+        [p1a, d1, t] = needDescriptiveFunctionName(p1);
       }
 
       if (ismultiply(p2)) {
@@ -246,7 +245,6 @@ function needDescriptiveFunctionName(p: U): [U, U, boolean] {
   }
   return [p, n, t];
 }
-
 
 function pushTerms(array: U[], p: U) {
   if (isadd(p)) {

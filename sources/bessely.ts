@@ -1,13 +1,6 @@
-import {
-  BESSELY,
-  caddr,
-  cadr,
-  Constants,
-  isdouble,
-  U
-} from '../runtime/defs';
+import { BESSELY, caddr, cadr, Constants, isdouble, U } from '../runtime/defs';
 import { yn } from '../runtime/otherCFunctions';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { double, nativeInt } from './bignum';
 import { Eval } from './eval';
 import { isnegativeterm } from './is';

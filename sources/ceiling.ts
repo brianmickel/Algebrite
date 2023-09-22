@@ -5,9 +5,9 @@ import {
   isdouble,
   isNumericAtom,
   Num,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { add } from './add';
 import { double } from './bignum';
 import { Eval } from './eval';

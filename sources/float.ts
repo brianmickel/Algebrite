@@ -11,10 +11,10 @@ import {
   MULTIPLY,
   PI,
   POWER,
-  U
+  U,
 } from '../runtime/defs';
 import { stop } from '../runtime/run';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { bignum_float, double } from './bignum';
 import { Eval } from './eval';
 import { makeList } from './list';

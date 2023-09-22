@@ -11,15 +11,15 @@ import {
   NIL,
   NUM,
   Sign,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { subtract } from './add';
 import { Eval } from './eval';
 import { yyfloat } from './float';
 import {
   isZeroAtomOrTensor,
-  isZeroLikeOrNonZeroLikeOrUndetermined
+  isZeroLikeOrNonZeroLikeOrUndetermined,
 } from './is';
 import { simplify } from './simplify';
 

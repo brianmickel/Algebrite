@@ -5,10 +5,10 @@ import {
   Constants,
   COSH,
   isdouble,
-  U
+  U,
 } from '../runtime/defs';
 import { stop } from '../runtime/run';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { double } from './bignum';
 import { Eval } from './eval';
 import { isplusone } from './is';

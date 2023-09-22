@@ -25,7 +25,7 @@ import { mpow } from './mpow';
 import { mroot } from './mroot';
 import { multiply, negate } from './multiply';
 import { quickfactor } from './quickfactor';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 
 // Rational power function
 export function qpow(base: Num, expo: Num): U {
@@ -183,9 +183,7 @@ function normalize_angle(A: Num): U {
   let result = makeList(symbol(POWER), Constants.negOne, R);
 
   // negate if quotient is odd
-  return Q.q.a.isOdd()
-    ? negate(result)
-    : result;
+  return Q.q.a.isOdd() ? negate(result) : result;
 }
 
 function is_small_integer(p: Num): boolean {

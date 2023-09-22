@@ -7,9 +7,9 @@ import {
   ismultiply,
   ispower,
   LOG,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { add, subtract } from './add';
 import { double } from './bignum';
 import { denominator } from './denominator';

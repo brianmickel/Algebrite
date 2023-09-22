@@ -1,11 +1,5 @@
-import {
-  Constants,
-  HERMITE,
-  issymbol,
-  SECRETX,
-  U
-} from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { Constants, HERMITE, issymbol, SECRETX, U } from '../runtime/defs';
+import { symbol } from '../runtime/symbol';
 import { subtract } from './add';
 import { integer, nativeInt } from './bignum';
 import { Eval } from './eval';

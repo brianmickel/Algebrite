@@ -11,9 +11,9 @@ import {
   isrational,
   PI,
   POWER,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { double, integer, nativeInt, rational } from './bignum';
 import { Eval } from './eval';
 import {
@@ -22,7 +22,7 @@ import {
   isminusoneoversqrttwo,
   isMinusSqrtThreeOverTwo,
   isoneoversqrttwo,
-  isSqrtThreeOverTwo
+  isSqrtThreeOverTwo,
 } from './is';
 import { makeList } from './list';
 import { multiply } from './multiply';

@@ -5,9 +5,9 @@ import {
   Constants,
   isdouble,
   SINH,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { double } from './bignum';
 import { Eval } from './eval';
 import { isZeroAtomOrTensor } from './is';
@@ -29,7 +29,7 @@ Returns the inverse hyperbolic sine of x.
 
 */
 export function Eval_arcsinh(x: U) {
-    return arcsinh(Eval(cadr(x)));
+  return arcsinh(Eval(cadr(x)));
 }
 
 function arcsinh(x: U): U {

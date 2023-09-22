@@ -25,7 +25,7 @@ import { isZeroAtomOrTensor } from './is';
 import { makeList } from './list';
 import { divide, multiply } from './multiply';
 import { is_square_matrix } from './tensor';
-import {symbol} from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 
 //-----------------------------------------------------------------------------
 //

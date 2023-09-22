@@ -10,10 +10,10 @@ import {
   istensor,
   NIL,
   Tensor,
-  U
+  U,
 } from '../runtime/defs';
 import { Find } from '../runtime/find';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { equal } from '../sources/misc';
 import { add, subtract } from './add';
 import { integer, nativeInt } from './bignum';
@@ -344,7 +344,7 @@ function expand_get_CF(p2: U, p5: U, p9: U): U[] {
 // Returns T = A/F where F is a factor of A.
 function trivial_divide(p2: U, p5: U): U {
   if (!ismultiply(p2)) {
-    return Constants.one
+    return Constants.one;
   }
   const arr: U[] = [];
   p2.tail().forEach((p0) => {

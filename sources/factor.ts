@@ -9,10 +9,10 @@ import {
   NIL,
   Num,
   primetab,
-  U
+  U,
 } from '../runtime/defs';
 import { stop } from '../runtime/run';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { integer } from './bignum';
 import { Eval } from './eval';
 import { factorpoly } from './factorpoly';

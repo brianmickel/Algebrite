@@ -13,7 +13,7 @@ import {
   istensor,
   NIL,
   Sign,
-  U
+  U,
 } from '../runtime/defs';
 import { strcmp } from '../runtime/otherCFunctions';
 import { get_printname, symbol } from '../runtime/symbol';

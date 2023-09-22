@@ -10,9 +10,9 @@ import {
   NIL,
   SECRETX,
   SIN,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { square } from '../sources/misc';
 import { subtract } from './add';
 import { integer, nativeInt, rational } from './bignum';
@@ -79,8 +79,8 @@ function __legendre(X: U, N: U, M: U): U {
   if (issymbol(X)) {
     result = __legendre2(n, m, X);
   } else {
-      const expr = __legendre2(n, m, symbol(SECRETX));
-      result = Eval(subst(expr, symbol(SECRETX), X));
+    const expr = __legendre2(n, m, symbol(SECRETX));
+    result = Eval(subst(expr, symbol(SECRETX), X));
   }
   result = __legendre3(result, m, X) || result;
   return result;

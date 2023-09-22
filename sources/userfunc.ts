@@ -10,7 +10,7 @@ import {
   istensor,
   SYMBOL_D,
   Tensor,
-  U
+  U,
 } from '../runtime/defs';
 import { stop } from '../runtime/run';
 import { get_binding, symbol } from '../runtime/symbol';
@@ -109,7 +109,7 @@ export function Eval_user_function(p1: U): U {
   // Create the argument substitution list S
   p1 = A;
   let p2 = B;
-  const S:U[]=[];
+  const S: U[] = [];
 
   while (iscons(p1) && iscons(p2)) {
     S.push(car(p1));
@@ -137,7 +137,7 @@ export function Eval_user_function(p1: U): U {
  * @param p2 subst. list which is a list where each consecutive pair
  * is what needs to be substituted and with what
  */
-function rewrite_args(p1:U, p2:U[]):U {
+function rewrite_args(p1: U, p2: U[]): U {
   //console.log "subst. list " + p2
   //console.log "expr: " + p1
 
@@ -146,7 +146,7 @@ function rewrite_args(p1:U, p2:U[]):U {
   }
 
   if (iscons(p1)) {
-    let result:U[]=[];
+    let result: U[] = [];
     if (car(p1) === p2[0]) {
       // rewrite a function in
       // the body with the one
@@ -185,9 +185,9 @@ function rewrite_args(p1:U, p2:U[]):U {
 
   // Check if there is a direct match
   // of symbols right away
-  for (let i = 0; i < p2.length; i+=2) {
+  for (let i = 0; i < p2.length; i += 2) {
     if (p1 === p2[i]) {
-      return p2[i+1];
+      return p2[i + 1];
     }
   }
 
@@ -204,7 +204,7 @@ function rewrite_args(p1:U, p2:U[]):U {
   return p3;
 }
 
-function rewrite_args_tensor(p1: Tensor, p2: U[]):U {
+function rewrite_args_tensor(p1: Tensor, p2: U[]): U {
   p1 = copy_tensor(p1);
   p1.tensor.elem = p1.tensor.elem.map((el) => rewrite_args(el, p2));
 

@@ -36,11 +36,11 @@ import {
   Sym,
   TAN,
   TANH,
-  U
+  U,
 } from '../runtime/defs';
 import { Find } from '../runtime/find';
 import { stop } from '../runtime/run';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { equal, exponential, length, lessp } from '../sources/misc';
 import { add, add_all, subtract } from './add';
 import { besselj } from './besselj';

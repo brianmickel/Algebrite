@@ -10,10 +10,10 @@ import {
   Sign,
   Sym,
   Tensor,
-  U
+  U,
 } from '../runtime/defs';
 import { stop } from '../runtime/run';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { equal, lessp } from '../sources/misc';
 import { add } from './add';
 import { nativeInt } from './bignum';

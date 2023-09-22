@@ -30,16 +30,21 @@ import {
   TESTLT,
   TRANSPOSE,
   transpose_unicode,
-  U
+  U,
 } from '../runtime/defs';
-import {isalnumorunderscore, isalpha, isdigit, isspace,} from '../runtime/otherCFunctions';
-import {stop} from '../runtime/run';
-import {symbol, usr_symbol} from '../runtime/symbol';
-import {bignum_scan_float, bignum_scan_integer} from './bignum';
-import {equaln} from './is';
-import {makeList} from './list';
-import {inverse, multiply, negate} from './multiply';
-import {check_tensor_dimensions} from './tensor';
+import {
+  isalnumorunderscore,
+  isalpha,
+  isdigit,
+  isspace,
+} from '../runtime/otherCFunctions';
+import { stop } from '../runtime/run';
+import { symbol, usr_symbol } from '../runtime/symbol';
+import { bignum_scan_float, bignum_scan_integer } from './bignum';
+import { equaln } from './is';
+import { makeList } from './list';
+import { inverse, multiply, negate } from './multiply';
+import { check_tensor_dimensions } from './tensor';
 
 // This scanner uses the recursive descent method.
 //
@@ -142,9 +147,10 @@ export function scan(s: string): [number, U] {
   defs.expanding = prev_expanding;
 
   if (!assignmentFound) {
-    defs.symbolsInExpressionsWithoutAssignments = defs.symbolsInExpressionsWithoutAssignments.concat(
-      symbolsLeftOfAssignment
-    );
+    defs.symbolsInExpressionsWithoutAssignments =
+      defs.symbolsInExpressionsWithoutAssignments.concat(
+        symbolsLeftOfAssignment
+      );
   }
 
   return [token_str - input_str, expr];
@@ -539,19 +545,19 @@ function scan_symbol(): U {
   if (meta_mode && typeof token_buf == 'string' && token_buf.length === 1) {
     switch (token_buf[0]) {
       case 'a':
-        result = (symbol(METAA));
+        result = symbol(METAA);
         break;
       case 'b':
-        result = (symbol(METAB));
+        result = symbol(METAB);
         break;
       case 'x':
-        result = (symbol(METAX));
+        result = symbol(METAX);
         break;
       default:
-        result = (usr_symbol(token_buf));
+        result = usr_symbol(token_buf);
     }
   } else {
-    result = (usr_symbol(token_buf));
+    result = usr_symbol(token_buf);
   }
   //console.log "found symbol: " + token_buf
   if (scanningParameters.length === 0) {
@@ -620,9 +626,9 @@ function scan_function_call_with_function_name(): U {
           (x) =>
             !new RegExp(
               'roots_' +
-              (functionInvokationsScanningStack.length - 1) +
-              '_' +
-              token_buf
+                (functionInvokationsScanningStack.length - 1) +
+                '_' +
+                token_buf
             ).test(x)
         );
         skipRootVariableToBeSolved = true;
@@ -638,9 +644,9 @@ function scan_function_call_with_function_name(): U {
           (x) =>
             !new RegExp(
               'sum_' +
-              (functionInvokationsScanningStack.length - 1) +
-              '_' +
-              token_buf
+                (functionInvokationsScanningStack.length - 1) +
+                '_' +
+                token_buf
             ).test(x)
         );
         skipRootVariableToBeSolved = true;
@@ -656,9 +662,9 @@ function scan_function_call_with_function_name(): U {
           (x) =>
             !new RegExp(
               'product_' +
-              (functionInvokationsScanningStack.length - 1) +
-              '_' +
-              token_buf
+                (functionInvokationsScanningStack.length - 1) +
+                '_' +
+                token_buf
             ).test(x)
         );
         skipRootVariableToBeSolved = true;
@@ -674,9 +680,9 @@ function scan_function_call_with_function_name(): U {
           (x) =>
             !new RegExp(
               'for_' +
-              (functionInvokationsScanningStack.length - 1) +
-              '_' +
-              token_buf
+                (functionInvokationsScanningStack.length - 1) +
+                '_' +
+                token_buf
             ).test(x)
         );
         skipRootVariableToBeSolved = true;
@@ -692,9 +698,9 @@ function scan_function_call_with_function_name(): U {
           (x) =>
             !new RegExp(
               'defint_' +
-              (functionInvokationsScanningStack.length - 1) +
-              '_' +
-              token_buf
+                (functionInvokationsScanningStack.length - 1) +
+                '_' +
+                token_buf
             ).test(x)
         );
         skipRootVariableToBeSolved = true;
@@ -795,7 +801,7 @@ function scan_function_call_without_function_name(lhs: U): U {
   // at runtime (i.e. we need to evaulate something to find it
   // e.g. it might be inside a tensor, so we'd need to evaluate
   // a tensor element access in that case)
-  const func = makeList(symbol(EVAL), lhs)
+  const func = makeList(symbol(EVAL), lhs);
 
   const fcall: U[] = [func];
 

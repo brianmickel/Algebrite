@@ -165,7 +165,6 @@ function yyfactorpoly(p1: U, p2: U): U {
         //  negate()
         //  negate_noexpand()
 
-
         // factor out negative sign (not req'd because p4 > 1)
         //if 0
         /*
@@ -218,7 +217,10 @@ function yyfactorpoly(p1: U, p2: U): U {
         const checkingTheDivision = multiply(remainingPoly, p8);
 
         if (!equal(checkingTheDivision, dividend)) {
-          return multiply_noexpand(previousFactorisation, noexpand(yycondense, dividend));
+          return multiply_noexpand(
+            previousFactorisation,
+            noexpand(yycondense, dividend)
+          );
         }
 
         //console.log("result: (still to be factored) " + remainingPoly)
@@ -314,7 +316,6 @@ function get_factor_from_real_root(
       p3 = negate(divide(p5, p4));
 
       p6 = Evalpoly(p3, polycoeff, factpoly_expo);
-
 
       if (isZeroAtomOrTensor(p6)) {
         return [true, p4, p5];

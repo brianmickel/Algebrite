@@ -9,9 +9,9 @@ import {
   iscons,
   isdouble,
   SIN,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { add, subtract } from './add';
 import { double, integer, nativeInt, rational } from './bignum';
 import { cosine } from './cos';

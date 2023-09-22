@@ -8,7 +8,7 @@ import {
   ismultiply,
   ispower,
   istensor,
-  U
+  U,
 } from '../runtime/defs';
 import { add } from './add';
 import { Condense } from './condense';
@@ -104,7 +104,7 @@ function multiply_denominators_factor(p: U, p2: U): U {
 }
 
 function __rationalize_tensor(p1: U): U {
-  p1 = Eval(p1);  // makes a copy
+  p1 = Eval(p1); // makes a copy
 
   if (!istensor(p1)) {
     // might be zero

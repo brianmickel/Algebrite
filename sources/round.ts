@@ -4,9 +4,9 @@ import {
   isdouble,
   isNumericAtom,
   ROUND,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { double, integer } from './bignum';
 import { Eval } from './eval';
 import { yyfloat } from './float';

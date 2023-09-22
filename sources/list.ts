@@ -1,5 +1,5 @@
 import { Cons, NIL, U } from '../runtime/defs';
-import {symbol} from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 
 // Convert an array into a CONS list.
 // TODO: rename this to just list

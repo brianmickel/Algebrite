@@ -5,7 +5,7 @@ import { factor_small_number } from './factor';
 import { isZeroAtomOrTensor } from './is';
 import { makeList } from './list';
 import { multiply, multiply_all } from './multiply';
-import {symbol} from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 
 //-----------------------------------------------------------------------------
 //

@@ -6,9 +6,9 @@ import {
   doexpand,
   NIL,
   SYMBOL_X,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { equal } from '../sources/misc';
 import { subtract } from './add';
 import { Eval } from './eval';

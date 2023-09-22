@@ -317,8 +317,10 @@ export function convert_rational_to_double(p: Num): number {
     breakpoint;
   }
   const quotientAndRemainder = p.q.a.divmod(p.q.b);
-  return quotientAndRemainder.quotient.toJSNumber() +
-    quotientAndRemainder.remainder.toJSNumber() / p.q.b.toJSNumber();
+  return (
+    quotientAndRemainder.quotient.toJSNumber() +
+    quotientAndRemainder.remainder.toJSNumber() / p.q.b.toJSNumber()
+  );
 }
 
 export function integer(n: number): Num {
@@ -335,7 +337,7 @@ export function rational(
 ): Num {
   // `as any as number` cast added because bigInt(number) and bigInt(bigInt.BigInteger)
   // are both accepted signatures, but bigInt(number|bigInt.BigInteger) is not
-  return new Num(bigInt((a as any) as number), bigInt((b as any) as number));
+  return new Num(bigInt(a as any as number), bigInt(b as any as number));
 }
 
 export function nativeInt(p1: U): number {
@@ -495,38 +497,12 @@ function __factorial(n: number): bigInt.BigInteger {
 }
 
 const mask = [
-  0x00000001,
-  0x00000002,
-  0x00000004,
-  0x00000008,
-  0x00000010,
-  0x00000020,
-  0x00000040,
-  0x00000080,
-  0x00000100,
-  0x00000200,
-  0x00000400,
-  0x00000800,
-  0x00001000,
-  0x00002000,
-  0x00004000,
-  0x00008000,
-  0x00010000,
-  0x00020000,
-  0x00040000,
-  0x00080000,
-  0x00100000,
-  0x00200000,
-  0x00400000,
-  0x00800000,
-  0x01000000,
-  0x02000000,
-  0x04000000,
-  0x08000000,
-  0x10000000,
-  0x20000000,
-  0x40000000,
-  0x80000000,
+  0x00000001, 0x00000002, 0x00000004, 0x00000008, 0x00000010, 0x00000020,
+  0x00000040, 0x00000080, 0x00000100, 0x00000200, 0x00000400, 0x00000800,
+  0x00001000, 0x00002000, 0x00004000, 0x00008000, 0x00010000, 0x00020000,
+  0x00040000, 0x00080000, 0x00100000, 0x00200000, 0x00400000, 0x00800000,
+  0x01000000, 0x02000000, 0x04000000, 0x08000000, 0x10000000, 0x20000000,
+  0x40000000, 0x80000000,
 ];
 
 // unsigned int *x, unsigned int k

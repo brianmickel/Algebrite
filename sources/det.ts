@@ -12,7 +12,7 @@ import { integer } from './bignum';
 import { makeList } from './list';
 import { divide, multiply, negate } from './multiply';
 import { is_square_matrix } from './tensor';
-import {symbol} from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 
 /* det =====================================================================
 
@@ -132,7 +132,7 @@ export function determinant(elements: readonly U[], n: number): U {
 //  out the columns below it.
 //
 //-----------------------------------------------------------------------------
-function detg(p1:Tensor) {
+function detg(p1: Tensor) {
   if (!is_square_matrix(p1)) {
     return makeList(symbol(DET), p1);
   }

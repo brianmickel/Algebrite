@@ -9,10 +9,10 @@ import {
   MSIGN,
   NUM,
   PI,
-  U
+  U,
 } from '../runtime/defs';
 import { jn } from '../runtime/otherCFunctions';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { subtract } from './add';
 import { double, integer, nativeInt, rational } from './bignum';
 import { cosine } from './cos';

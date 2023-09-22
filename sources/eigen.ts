@@ -8,7 +8,7 @@ import {
   istensor,
   NIL,
   Tensor,
-  U
+  U,
 } from '../runtime/defs';
 import { stop } from '../runtime/run';
 import { set_binding, symbol, usr_symbol } from '../runtime/symbol';

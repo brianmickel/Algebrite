@@ -1,5 +1,5 @@
 import { caddr, cadr, NIL, U } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { degree } from './degree';
 import { Eval } from './eval';
 import { filter } from './filter';

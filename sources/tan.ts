@@ -5,9 +5,9 @@ import {
   Constants,
   isdouble,
   TAN,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { double, integer, nativeInt, rational } from './bignum';
 import { Eval } from './eval';
 import { isnegative } from './is';

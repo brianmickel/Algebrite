@@ -6,9 +6,9 @@ import {
   isNumericAtom,
   ispower,
   NIL,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { equal, lessp } from '../sources/misc';
 import { Eval } from './eval';
 import { guess } from './guess';

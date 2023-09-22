@@ -1,5 +1,5 @@
 import { cadr, Constants, POWER, U } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { abs } from './abs';
 import { arg } from './arg';
 import { Eval } from './eval';

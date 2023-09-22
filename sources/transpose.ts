@@ -20,10 +20,10 @@ import {
   NIL,
   SYMBOL_IDENTITY_MATRIX,
   TRANSPOSE,
-  U
+  U,
 } from '../runtime/defs';
 import { stop } from '../runtime/run';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { equal } from '../sources/misc';
 import { add } from './add';
 import { integer, nativeInt } from './bignum';

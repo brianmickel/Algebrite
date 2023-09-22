@@ -30,10 +30,10 @@ import {
   SYMBOL_Y,
   SYMBOL_Z,
   Tensor,
-  U
+  U,
 } from '../runtime/defs';
 import { Find } from '../runtime/find';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { equal, length } from '../sources/misc';
 import { absValFloat } from './abs';
 import { integer, nativeInt } from './bignum';
@@ -41,7 +41,6 @@ import { Eval_predicate } from './eval';
 import { zzfloat } from './float';
 import { guess } from './guess';
 import { multiply } from './multiply';
-
 
 // this routine is a simple check on whether we have
 // a basic zero in our hands. It doesn't perform any
@@ -244,9 +243,7 @@ export function isplusone(
   return false;
 }
 
-export function isminusone(
-  p: BaseAtom
-): p is (Num | Double) & {
+export function isminusone(p: BaseAtom): p is (Num | Double) & {
   __ts_sign: -1;
   __ts_integer: true;
   __ts_special: -1;
@@ -266,9 +263,7 @@ export function isminusone(
   return false;
 }
 
-export function isone(
-  p: BaseAtom
-): p is (Num | Double) & {
+export function isone(p: BaseAtom): p is (Num | Double) & {
   __ts_sign: -1 | 1;
   __ts_integer: true;
   __ts_special: 1 | -1;

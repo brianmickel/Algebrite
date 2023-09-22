@@ -1,16 +1,8 @@
 import { alloc_tensor } from '../runtime/alloc';
-import {
-  car,
-  cdr,
-  iscons,
-  istensor,
-  NIL,
-  U,
-  Cons,
-} from '../runtime/defs';
+import { car, cdr, iscons, istensor, NIL, U, Cons } from '../runtime/defs';
 import { equal } from '../sources/misc';
 import { check_tensor_dimensions } from './tensor';
-import {symbol} from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 
 /*
   Substitute new expr for old expr in expr.

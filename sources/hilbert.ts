@@ -3,7 +3,7 @@ import { zero_matrix } from '../sources/misc';
 import { integer, nativeInt } from './bignum';
 import { makeList } from './list';
 import { inverse } from './multiply';
-import {symbol} from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 
 //-----------------------------------------------------------------------------
 //

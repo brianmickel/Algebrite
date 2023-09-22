@@ -6,9 +6,9 @@ import {
   MSIGN,
   MZERO,
   SGN,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { absval } from './abs';
 import { Eval } from './eval';
 import { iscomplexnumber, isnegativeterm } from './is';

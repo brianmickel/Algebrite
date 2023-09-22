@@ -22,7 +22,7 @@ export function factors(p: U): U[] {
     p.tail().forEach((el) => result.push(...term_factors(el)));
     return result;
   }
-  
+
   return term_factors(p);
 }
 

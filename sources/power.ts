@@ -27,7 +27,7 @@ import {
   PI,
   POWER,
   SIN,
-  U
+  U,
 } from '../runtime/defs';
 import { Find } from '../runtime/find';
 import { get_binding, symbol } from '../runtime/symbol';
@@ -39,7 +39,9 @@ import {
   compare_numbers,
   double,
   integer,
-  nativeDouble, nativeInt, rational
+  nativeDouble,
+  nativeInt,
+  rational,
 } from './bignum';
 import { conjugate } from './conj';
 import { cosine } from './cos';
@@ -57,7 +59,7 @@ import {
   isoneovertwo,
   ispositivenumber,
   isquarterturn,
-  isZeroAtomOrTensor
+  isZeroAtomOrTensor,
 } from './is';
 import { makeList } from './list';
 import { divide, multiply, negate } from './multiply';
@@ -290,9 +292,7 @@ function yypower(base: U, exponent: U): U {
       // gets the denominator
       let result = divide(p3, multiply(p3, base));
 
-      return !isone(exponent)
-        ? power(result, negate(exponent))
-        : result;
+      return !isone(exponent) ? power(result, negate(exponent)) : result;
     }
 
     // noninteger or floating power?
@@ -302,8 +302,9 @@ function yypower(base: U, exponent: U): U {
       // need to evaluate PI to its actual double
       // value
 
-      const pi = defs.evaluatingAsFloats ||
-          (iscomplexnumberdouble(base) && isdouble(exponent))
+      const pi =
+        defs.evaluatingAsFloats ||
+        (iscomplexnumberdouble(base) && isdouble(exponent))
           ? double(Math.PI)
           : symbol(PI);
       let tmp = multiply(

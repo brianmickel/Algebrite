@@ -7,9 +7,9 @@ import {
   LAGUERRE,
   NIL,
   SECRETX,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { add, subtract } from './add';
 import { integer, nativeInt } from './bignum';
 import { Eval } from './eval';

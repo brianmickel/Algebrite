@@ -1,15 +1,18 @@
 import {
   cadr,
-  car, Constants, COS,
-  COSH, iscons,
+  car,
+  Constants,
+  COS,
+  COSH,
+  iscons,
   SIN,
   SINH,
   TAN,
   TANH,
   TENSOR,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { exponential } from '../sources/misc';
 import { add, subtract } from './add';
 import { integer, rational } from './bignum';

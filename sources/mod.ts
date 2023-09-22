@@ -5,10 +5,10 @@ import {
   isNumericAtom,
   MOD,
   Num,
-  U
+  U,
 } from '../runtime/defs';
 import { stop } from '../runtime/run';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { integer, nativeInt } from './bignum';
 import { Eval } from './eval';
 import { isinteger, isZeroAtomOrTensor } from './is';

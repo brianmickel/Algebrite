@@ -20,7 +20,7 @@ import { integer } from './bignum';
 import { coeff } from './coeff';
 import { equaln, ispolyexpandedform, isZeroAtomOrTensor } from './is';
 import { makeList } from './list';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 
 export function bake(p1: U): U {
   return doexpand(_bake, p1);
@@ -56,7 +56,7 @@ function _bake(p1: U): U {
     // such constructs "statically", i.e. without fully running
     // the loops.
   }
-  
+
   if (iscons(p1) && car(p1) !== symbol(FOR)) {
     return makeList(car(p1), ...p1.tail().map(bake));
   }

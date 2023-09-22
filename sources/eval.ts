@@ -10,18 +10,18 @@ import {
   car,
   cdadr,
   cddr,
-  cdr, 
+  cdr,
   CONS,
   Cons,
-  Constants, 
-  defs, 
-  DOUBLE, 
+  Constants,
+  defs,
+  DOUBLE,
   EVAL,
-   INDEX, 
-   iscons,
+  INDEX,
+  iscons,
   isdouble,
   ISINTEGER,
-  isNumericAtom, 
+  isNumericAtom,
   isrational,
   issymbol,
   istensor,
@@ -37,11 +37,17 @@ import {
   TENSOR,
   Tensor,
   TESTEQ,
-  U
+  U,
 } from '../runtime/defs';
 import { check_esc_flag, stop } from '../runtime/run';
 import { get_binding, iskeyword, set_binding, symbol } from '../runtime/symbol';
-import { convert_rational_to_double, double, integer, nativeInt, rational } from './bignum';
+import {
+  convert_rational_to_double,
+  double,
+  integer,
+  nativeInt,
+  rational,
+} from './bignum';
 import { define_user_function } from './define';
 import { det } from './det';
 import { divisors } from './divisors';
@@ -50,7 +56,12 @@ import { factorpoly } from './factorpoly';
 import { hermite } from './hermite';
 import { hilbert } from './hilbert';
 import { inv, invg } from './inv';
-import { isfloating, isinteger, isintegerorintegerfloat, isZeroLikeOrNonZeroLikeOrUndetermined } from './is';
+import {
+  isfloating,
+  isinteger,
+  isintegerorintegerfloat,
+  isZeroLikeOrNonZeroLikeOrUndetermined,
+} from './is';
 import { makeList } from './list';
 import { exponential } from './misc';
 import { power } from './power';
@@ -135,9 +146,8 @@ export function Eval_sym(p1: Sym): U {
     // Note that recursive functions will still work because
     // as mentioned at the top, this method doesn't look
     // up and evaluate function calls.
-    const positionIfSymbolAlreadyBeingEvaluated = defs.chainOfUserSymbolsNotFunctionsBeingEvaluated.indexOf(
-      p1
-    );
+    const positionIfSymbolAlreadyBeingEvaluated =
+      defs.chainOfUserSymbolsNotFunctionsBeingEvaluated.indexOf(p1);
     if (positionIfSymbolAlreadyBeingEvaluated !== -1) {
       let cycleString = '';
       for (
@@ -517,7 +527,7 @@ function setq_indexed(p1: U): U {
   let args: U[] = [];
   let p2 = cdadr(p1);
   if (iscons(p2)) {
-    args = ([...p2].map(Eval));
+    args = [...p2].map(Eval);
   }
   const p3 = set_component(lvalue, ...args);
   set_binding(p4, p3);

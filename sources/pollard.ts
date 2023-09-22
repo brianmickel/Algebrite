@@ -1,15 +1,24 @@
 import bigInt from 'big-integer';
-import {Constants, defs, MEQUAL, MULTIPLY, Num, POWER, primetab, U,} from '../runtime/defs';
-import {mcmp} from '../runtime/mcmp';
-import {stop} from '../runtime/run';
-import {symbol} from '../runtime/symbol';
-import {mint, setSignTo} from './bignum';
-import {equaln} from './is';
+import {
+  Constants,
+  defs,
+  MEQUAL,
+  MULTIPLY,
+  Num,
+  POWER,
+  primetab,
+  U,
+} from '../runtime/defs';
+import { mcmp } from '../runtime/mcmp';
+import { stop } from '../runtime/run';
+import { symbol } from '../runtime/symbol';
+import { mint, setSignTo } from './bignum';
+import { equaln } from './is';
 import { makeList } from './list';
-import {madd, msub} from './madd';
-import {mgcd} from './mgcd';
-import {mdiv, mdivrem, mmod, mmul} from './mmul';
-import {mprime} from './mprime';
+import { madd, msub } from './madd';
+import { mgcd } from './mgcd';
+import { mdiv, mdivrem, mmod, mmul } from './mmul';
+import { mprime } from './mprime';
 
 // Factor using the Pollard rho method
 

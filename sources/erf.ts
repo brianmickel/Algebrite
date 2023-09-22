@@ -1,5 +1,5 @@
 import { cadr, Constants, ERF, isdouble, U } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { double } from './bignum';
 import { erfc } from './erfc';
 import { Eval } from './eval';

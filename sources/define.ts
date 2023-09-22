@@ -8,7 +8,7 @@ import {
   FUNCTION,
   issymbol,
   NIL,
-  U
+  U,
 } from '../runtime/defs';
 import { stop } from '../runtime/run';
 import { set_binding, symbol } from '../runtime/symbol';

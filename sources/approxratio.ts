@@ -8,9 +8,9 @@ import {
   DOUBLE,
   iscons,
   istensor,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { integer, rational } from './bignum';
 import { zzfloat } from './float';
 import { makeList } from './list';
@@ -118,7 +118,8 @@ function floatToRatioRoutine(
   while (true) {
     Z = 1.0 / (Z - Math.floor(Z));
     const temp = FractionDenominator;
-    FractionDenominator = FractionDenominator * Math.floor(Z) + PreviousDenominator;
+    FractionDenominator =
+      FractionDenominator * Math.floor(Z) + PreviousDenominator;
     PreviousDenominator = temp;
     FractionNumerator = Math.floor(decimal * FractionDenominator + 0.5);
     // Rounding Function
@@ -646,9 +647,8 @@ function approxTrigonometric(theFloat: number): ApproxResult {
     return approxSineOfRationalsResult;
   }
 
-  const approxSineOfRationalMultiplesOfPIResult = approxSineOfRationalMultiplesOfPI(
-    theFloat
-  );
+  const approxSineOfRationalMultiplesOfPIResult =
+    approxSineOfRationalMultiplesOfPI(theFloat);
   if (approxSineOfRationalMultiplesOfPIResult != null) {
     return approxSineOfRationalMultiplesOfPIResult;
   }
@@ -872,9 +872,8 @@ export function approxAll(theFloat: number): ApproxResult {
     }
   }
 
-  const approxRationalsOfPowersOfPIResult = approxRationalsOfPowersOfPI(
-    theFloat
-  );
+  const approxRationalsOfPowersOfPIResult =
+    approxRationalsOfPowersOfPI(theFloat);
   if (approxRationalsOfPowersOfPIResult != null) {
     constantsSum = simpleComplexityMeasure(approxRationalsOfPowersOfPIResult);
     if (constantsSum < constantsSumMin) {

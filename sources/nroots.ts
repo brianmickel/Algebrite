@@ -1,7 +1,7 @@
 import { alloc_tensor } from '../runtime/alloc';
 import { caddr, cadr, Constants, isdouble, NIL, U } from '../runtime/defs';
 import { stop } from '../runtime/run';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { cmp_expr } from '../sources/misc';
 import { add } from './add';
 import { double } from './bignum';

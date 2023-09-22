@@ -5,9 +5,9 @@ import {
   Constants,
   NIL,
   SYMBOL_X,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { add, subtract } from './add';
 import { integer } from './bignum';
 import { coeff } from './coeff';

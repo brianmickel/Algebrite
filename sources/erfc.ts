@@ -1,5 +1,5 @@
 import { cadr, Constants, ERFC, isdouble, U } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { double } from './bignum';
 import { Eval } from './eval';
 import { isZeroAtomOrTensor } from './is';
@@ -44,22 +44,22 @@ export function erfc(x: number) {
     t *
     Math.exp(
       -z * z -
-      1.26551223 +
-      t *
-      (1.00002368 +
+        1.26551223 +
         t *
-        (0.37409196 +
-          t *
-          (0.09678418 +
+          (1.00002368 +
             t *
-            (-0.18628806 +
-              t *
-              (0.27886807 +
+              (0.37409196 +
                 t *
-                (-1.13520398 +
-                  t *
-                  (1.48851587 +
-                    t * (-0.82215223 + t * 0.17087277))))))))
+                  (0.09678418 +
+                    t *
+                      (-0.18628806 +
+                        t *
+                          (0.27886807 +
+                            t *
+                              (-1.13520398 +
+                                t *
+                                  (1.48851587 +
+                                    t * (-0.82215223 + t * 0.17087277))))))))
     );
 
   if (x >= 0.0) {

@@ -1,5 +1,5 @@
 import { car, cdr, Constants, NIL, TAYLOR, U } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { add, subtract } from './add';
 import { integer, nativeInt } from './bignum';
 import { derivative } from './derivative';

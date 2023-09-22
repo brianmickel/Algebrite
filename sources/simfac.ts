@@ -2,14 +2,16 @@ import {
   caadr,
   cadadr,
   caddr,
-  cadr, Constants,
+  cadr,
+  Constants,
   FACTORIAL,
   isadd,
   isfactorial,
   ismultiply,
-  ispower, U
+  ispower,
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { equal } from '../sources/misc';
 import { add, add_all, subtract } from './add';
 import { Eval } from './eval';

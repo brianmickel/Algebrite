@@ -8,12 +8,12 @@ import {
   issymbol,
   SIN,
   U,
-  YYRECT
+  YYRECT,
 } from '../runtime/defs';
 import {
   Find,
   findPossibleClockForm,
-  findPossibleExponentialForm
+  findPossibleExponentialForm,
 } from '../runtime/find';
 import { get_binding, symbol } from '../runtime/symbol';
 import { abs } from './abs';

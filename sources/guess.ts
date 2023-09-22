@@ -7,7 +7,7 @@ import {
   U,
 } from '../runtime/defs';
 import { Find } from '../runtime/find';
-import {symbol} from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 
 // Guess which symbol to use for derivative, integral, etc.
 export function guess(p: U): U {

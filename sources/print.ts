@@ -31,7 +31,8 @@ import {
   FLOOR,
   FOR,
   FUNCTION,
-  INDEX, isadd,
+  INDEX,
+  isadd,
   iscons,
   isfactorial,
   isinnerordot,
@@ -42,7 +43,8 @@ import {
   isrational,
   isstr,
   issymbol,
-  istensor, LAST_2DASCII_PRINT,
+  istensor,
+  LAST_2DASCII_PRINT,
   LAST_FULL_PRINT,
   LAST_LATEX_PRINT,
   LAST_LIST_PRINT,
@@ -78,10 +80,16 @@ import {
   TESTGE,
   TESTGT,
   TESTLE,
-  TESTLT, U,
-  UNIT
+  TESTLT,
+  U,
+  UNIT,
 } from '../runtime/defs';
-import { get_binding, get_printname, set_binding, symbol } from '../runtime/symbol';
+import {
+  get_binding,
+  get_printname,
+  set_binding,
+  symbol,
+} from '../runtime/symbol';
 import { lessp } from '../sources/misc';
 import { absval } from './abs';
 import { mp_denominator, mp_numerator, print_number } from './bignum';
@@ -96,7 +104,7 @@ import {
   isNumberOneOverSomething,
   isoneovertwo,
   isplusone,
-  isplustwo
+  isplustwo,
 } from './is';
 import { multiply, negate } from './multiply';
 import { numerator } from './numerator';
@@ -198,7 +206,7 @@ function _print(p: U, passedPrintMode: string): string {
 }
 
 function rememberPrint(theString: string, theTypeOfPrint: string) {
-  const [,parsedString] = scan('"' + theString + '"');
+  const [, parsedString] = scan('"' + theString + '"');
   set_binding(symbol(theTypeOfPrint), parsedString);
 }
 
@@ -791,7 +799,7 @@ function print_tensor_inner(
       let retString: string;
       [k, retString] = Array.from(print_tensor_inner(p, j + 1, k)) as [
         number,
-        string
+        string,
       ];
       accumulator += retString;
       // add separator between elements dimensions

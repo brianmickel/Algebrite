@@ -13,7 +13,7 @@ import {
   ispower,
   issymbol,
   PI,
-  U
+  U,
 } from '../runtime/defs';
 import { get_binding, symbol } from '../runtime/symbol';
 import { add, subtract } from './add';
@@ -27,7 +27,7 @@ import {
   isnegativenumber,
   isoneovertwo,
   ispositivenumber,
-  isZeroAtomOrTensor
+  isZeroAtomOrTensor,
 } from './is';
 import { makeList } from './list';
 import { divide, multiply, negate } from './multiply';
@@ -117,9 +117,10 @@ function yyarg(p1: U): U {
   }
 
   if (isnegativenumber(p1)) {
-    const pi = isdouble(p1) || defs.evaluatingAsFloats
-      ? Constants.piAsDouble
-      : symbol(PI);
+    const pi =
+      isdouble(p1) || defs.evaluatingAsFloats
+        ? Constants.piAsDouble
+        : symbol(PI);
     return negate(pi);
   }
 
@@ -173,9 +174,7 @@ function argAdd(p1: U): U {
   const RE = real(p1);
   const IM = imag(p1);
   if (isZeroAtomOrTensor(RE)) {
-    return isnegative(IM)
-      ? negate(Constants.Pi())
-      : Constants.Pi();
+    return isnegative(IM) ? negate(Constants.Pi()) : Constants.Pi();
   }
 
   const arg1 = arctan(divide(IM, RE));

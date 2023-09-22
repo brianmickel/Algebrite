@@ -26,16 +26,31 @@ import {
   Num,
   OPERATOR,
   POWER,
-  U
+  U,
 } from '../runtime/defs';
 import { append } from '../runtime/otherCFunctions';
 import { stop } from '../runtime/run';
 import { symbol } from '../runtime/symbol';
 import { cmp_expr } from '../sources/misc';
 import { add, subtract } from './add';
-import { divide_numbers, invert_number, mp_denominator, mp_numerator, multiply_numbers, negate_number } from './bignum';
+import {
+  divide_numbers,
+  invert_number,
+  mp_denominator,
+  mp_numerator,
+  multiply_numbers,
+  negate_number,
+} from './bignum';
 import { Eval } from './eval';
-import { equaln, isfraction, isinteger, isminusone, isnegativenumber, isplusone, isZeroAtom } from './is';
+import {
+  equaln,
+  isfraction,
+  isinteger,
+  isminusone,
+  isnegativenumber,
+  isplusone,
+  isZeroAtom,
+} from './is';
 import { makeList } from './list';
 import { power } from './power';
 import { scalar_times_tensor, tensor_times_scalar } from './tensor';
@@ -109,7 +124,7 @@ function yymultiply(p1: U, p2: U): U {
 
   p2 = ismultiply(p2) ? cdr(p2) : makeList(p2);
 
-  const factors:U[] = [];
+  const factors: U[] = [];
 
   // handle numerical coefficients
   if (isNumericAtom(car(p1)) && isNumericAtom(car(p2))) {
@@ -381,14 +396,10 @@ export function negate_noexpand(p1: U): U {
 //
 //-----------------------------------------------------------------------------
 
-function __normalize_radical_factors(factors:U[]) {
+function __normalize_radical_factors(factors: U[]) {
   let i = 0;
   // if coeff is 1 or floating then don't bother
-  if (
-    isplusone(factors[0]) ||
-    isminusone(factors[0]) ||
-    isdouble(factors[0])
-  ) {
+  if (isplusone(factors[0]) || isminusone(factors[0]) || isdouble(factors[0])) {
     return;
   }
 

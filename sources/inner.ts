@@ -16,10 +16,10 @@ import {
   NIL,
   SYMBOL_IDENTITY_MATRIX,
   Tensor,
-  U
+  U,
 } from '../runtime/defs';
 import { stop } from '../runtime/run';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { add, subtract } from './add';
 import { Eval } from './eval';
 import { inv } from './inv';

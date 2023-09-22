@@ -8,9 +8,9 @@ import {
   isrational,
   MEQUAL,
   Num,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { add } from './add';
 import { rational } from './bignum';
 import { Eval } from './eval';

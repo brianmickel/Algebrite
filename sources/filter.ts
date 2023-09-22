@@ -7,7 +7,7 @@ import {
   iscons,
   istensor,
   Tensor,
-  U
+  U,
 } from '../runtime/defs';
 import { Find } from '../runtime/find';
 import { add } from './add';

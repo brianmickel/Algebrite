@@ -7,9 +7,9 @@ import {
   ispower,
   isrational,
   MZERO,
-  U
+  U,
 } from '../runtime/defs';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { Eval } from './eval';
 import { isnegativeterm } from './is';
 import { makeList } from './list';

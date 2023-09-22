@@ -5,7 +5,7 @@ import {
   cadr,
   Constants,
   issymbol,
-  U
+  U,
 } from '../runtime/defs';
 import { stop } from '../runtime/run';
 import { get_binding, set_binding } from '../runtime/symbol';

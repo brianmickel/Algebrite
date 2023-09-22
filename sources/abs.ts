@@ -12,15 +12,15 @@ import {
   istensor,
   PI,
   Tensor,
-  U
+  U,
 } from '../runtime/defs';
 import {
   Find,
   findPossibleClockForm,
-  findPossibleExponentialForm
+  findPossibleExponentialForm,
 } from '../runtime/find';
 import { stop } from '../runtime/run';
-import { symbol } from "../runtime/symbol";
+import { symbol } from '../runtime/symbol';
 import { exponential } from '../sources/misc';
 import { add } from './add';
 import { integer, rational } from './bignum';
@@ -35,7 +35,7 @@ import {
   isnegativenumber,
   isnegativeterm,
   ispositivenumber,
-  isZeroAtomOrTensor
+  isZeroAtomOrTensor,
 } from './is';
 import { makeList } from './list';
 import { divide, multiply, negate } from './multiply';
@@ -94,7 +94,7 @@ Notes
 */
 
 export function Eval_abs(p1: U) {
-    return abs(Eval(cadr(p1)));
+  return abs(Eval(cadr(p1)));
 }
 
 export function absValFloat(p1: U): U {

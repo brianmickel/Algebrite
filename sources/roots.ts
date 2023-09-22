@@ -600,8 +600,6 @@ function _solveDegree4NonzeroB(A: U, B: U, C: U, D: U, E: U): U[] {
   const simplified = simplify(add_all([four_x_4, r_q_x_2, r_q_x, R_r]));
   const depressedSolutions = roots(simplified, symbol(SECRETX)) as Tensor;
 
-  return depressedSolutions.tensor.elem.map((sol) => {
-    const result = simplify(subtract(sol, divide(B, multiply(integer(4), A))));
-    return result;
-  });
+  return depressedSolutions.tensor.elem.map((sol) => 
+   simplify(subtract(sol, divide(B, multiply(integer(4), A)))));
 }

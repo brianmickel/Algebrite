@@ -93,10 +93,8 @@ export function rect(p1: U): U {
   // abs(p1) * (cos (theta) + i * sin(theta))
   // where theta is arg(p1)
   // abs(z) * (cos(arg(z)) + i sin(arg(z)))
-  const result = multiply(
+  return multiply(
     abs(p1),
     add(cosine(arg(p1)), multiply(Constants.imaginaryunit, sine(arg(p1))))
   );
-
-  return result;
 }

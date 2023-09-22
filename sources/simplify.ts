@@ -418,9 +418,8 @@ function simplify_rectToClock(p1: U): U {
 }
 
 function simplify_polarRect(p1: U): U {
-  const tmp = polarRectAMinusOneBase(p1);
-
-  const p2 = Eval(tmp); // put new (hopefully simplified expr) in p2
+  // put new (hopefully simplified expr) in p2
+  const p2 = Eval(polarRectAMinusOneBase(p1));
 
   if (count(p2) < count(p1)) {
     p1 = p2;

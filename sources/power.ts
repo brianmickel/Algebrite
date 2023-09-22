@@ -69,7 +69,7 @@ import { power_tensor } from './tensor';
 /* Power function
 
   Input:    push  Base
-      push  Exponent
+            push  Exponent
 
   Output:    Result on stack
 */
@@ -85,15 +85,12 @@ export function power(p1: U, p2: U): U {
 }
 
 function yypower(base: U, exponent: U): U {
-  const inputExp = exponent;
-  const inputBase = base;
   // first, some very basic simplifications right away
 
   //  1 ^ a    ->  1
   //  a ^ 0    ->  1
   if (equal(base, Constants.one) || isZeroAtomOrTensor(exponent)) {
-    const one = Constants.One();
-    return one;
+    return Constants.One();
   }
 
   //  a ^ 1    ->  a
@@ -103,23 +100,19 @@ function yypower(base: U, exponent: U): U {
 
   //   -1 ^ -1    ->  -1
   if (isminusone(base) && isminusone(exponent)) {
-    const negOne = negate(Constants.One());
-    return negOne;
+    return negate(Constants.One());
   }
 
   //   -1 ^ 1/2  ->  i
   if (isminusone(base) && isoneovertwo(exponent)) {
-    const result = Constants.imaginaryunit;
-    return result;
+    return Constants.imaginaryunit;
   }
 
   //   -1 ^ -1/2  ->  -i
   if (isminusone(base) && isminusoneovertwo(exponent)) {
-    const result = negate(Constants.imaginaryunit);
-    return result;
+    return negate(Constants.imaginaryunit);
   }
 
-  let tmp: U;
   //   -1 ^ rational
   if (
     isminusone(base) &&
@@ -129,6 +122,7 @@ function yypower(base: U, exponent: U): U {
     ispositivenumber(exponent) &&
     !defs.evaluatingAsFloats
   ) {
+    let tmp: U;
     if (exponent.q.a < exponent.q.b) {
       tmp = makeList(symbol(POWER), base, exponent);
     } else {
@@ -146,25 +140,21 @@ function yypower(base: U, exponent: U): U {
     // evaluates clock form into
     // rectangular form. This seems to give
     // slightly better form to some test results.
-    const result = rect(tmp);
-    return result;
+    return rect(tmp);
   }
 
   // both base and exponent are rational numbers?
   if (isrational(base) && isrational(exponent)) {
-    const result = qpow(base, exponent);
-    return result;
+    return qpow(base, exponent);
   }
 
   // both base and exponent are either rational or double?
   if (isNumericAtom(base) && isNumericAtom(exponent)) {
-    const result = dpow(nativeDouble(base), nativeDouble(exponent));
-    return result;
+    return dpow(nativeDouble(base), nativeDouble(exponent));
   }
 
   if (istensor(base)) {
-    const result = power_tensor(base, exponent);
-    return result;
+    return power_tensor(base, exponent);
   }
 
   // if we only assume variables to be real, then |a|^2 = a^2
@@ -174,20 +164,17 @@ function yypower(base: U, exponent: U): U {
     iseveninteger(exponent) &&
     !isZeroAtomOrTensor(get_binding(symbol(ASSUME_REAL_VARIABLES)))
   ) {
-    const result = power(cadr(base), exponent);
-    return result;
+    return power(cadr(base), exponent);
   }
 
   // e^log(...)
   if (base === symbol(E) && car(exponent) === symbol(LOG)) {
-    const result = cadr(exponent);
-    return result;
+    return cadr(exponent);
   }
 
   // e^some_float
   if (base === symbol(E) && isdouble(exponent)) {
-    const result = double(Math.exp(exponent.d));
-    return result;
+    return double(Math.exp(exponent.d));
   }
 
   // complex number in exponential form, get it to rectangular
@@ -239,8 +226,7 @@ function yypower(base: U, exponent: U): U {
     ispower(base) && // when c is an integer
     (isinteger(exponent) || is_a_moreThanZero) // when a is >= 0
   ) {
-    const result = power(cadr(base), multiply(caddr(base), exponent));
-    return result;
+    return power(cadr(base), multiply(caddr(base), exponent));
   }
 
   let b_isEven_and_c_isItsInverse = false;
@@ -252,8 +238,7 @@ function yypower(base: U, exponent: U): U {
   }
 
   if (ispower(base) && b_isEven_and_c_isItsInverse) {
-    const result = abs(cadr(base));
-    return result;
+    return abs(cadr(base));
   }
 
   //  when expanding,
@@ -272,11 +257,10 @@ function yypower(base: U, exponent: U): U {
     car(base) === symbol(SIN) &&
     iseveninteger(exponent)
   ) {
-    const result = power(
+    return power(
       subtract(Constants.one, power(cosine(cadr(base)), integer(2))),
       multiply(exponent, rational(1, 2))
     );
-    return result;
   }
 
   //  cos(x) ^ 2n -> (1 - sin(x) ^ 2) ^ n
@@ -285,11 +269,10 @@ function yypower(base: U, exponent: U): U {
     car(base) === symbol(COS) &&
     iseveninteger(exponent)
   ) {
-    const result = power(
+    return power(
       subtract(Constants.one, power(sine(cadr(base)), integer(2))),
       multiply(exponent, rational(1, 2))
     );
-    return result;
   }
 
   // complex number? (just number, not expression)
@@ -307,11 +290,9 @@ function yypower(base: U, exponent: U): U {
       // gets the denominator
       let result = divide(p3, multiply(p3, base));
 
-      if (!isone(exponent)) {
-        result = power(result, negate(exponent));
-      }
-
-      return result;
+      return !isone(exponent)
+        ? power(result, negate(exponent))
+        : result;
     }
 
     // noninteger or floating power?
@@ -321,9 +302,7 @@ function yypower(base: U, exponent: U): U {
       // need to evaluate PI to its actual double
       // value
 
-      //console.log("power pushing PI when base is: " + base + " and exponent is:" + exponent)
-      const pi =
-        defs.evaluatingAsFloats ||
+      const pi = defs.evaluatingAsFloats ||
           (iscomplexnumberdouble(base) && isdouble(exponent))
           ? double(Math.PI)
           : symbol(PI);
@@ -349,8 +328,7 @@ function yypower(base: U, exponent: U): U {
     return polarResult;
   }
 
-  const result = makeList(symbol(POWER), base, exponent);
-  return result;
+  return makeList(symbol(POWER), base, exponent);
 }
 
 //-----------------------------------------------------------------------------

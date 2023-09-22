@@ -150,7 +150,7 @@ export function absval(p1: U): U {
     // sum
     p1 = rect(p1); // convert polar terms, if any
 
-    const result = simplify_trig(
+    return simplify_trig(
       power(
         // prettier-ignore
         add(
@@ -160,7 +160,6 @@ export function absval(p1: U): U {
         rational(1, 2)
       )
     );
-    return result;
   }
 
   // -1 to any power

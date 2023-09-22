@@ -7,8 +7,7 @@ import { isZeroAtomOrTensor } from './is';
 
 // shape of tensor
 export function Eval_shape(p1: U) {
-  const result = shape(Eval(cadr(p1)));
-  return result;
+  return shape(Eval(cadr(p1)));
 }
 
 function shape(p1: U): U {

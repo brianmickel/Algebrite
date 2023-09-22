@@ -118,8 +118,7 @@ function floatToRatioRoutine(
   while (true) {
     Z = 1.0 / (Z - Math.floor(Z));
     const temp = FractionDenominator;
-    FractionDenominator =
-      FractionDenominator * Math.floor(Z) + PreviousDenominator;
+    FractionDenominator = FractionDenominator * Math.floor(Z) + PreviousDenominator;
     PreviousDenominator = temp;
     FractionNumerator = Math.floor(decimal * FractionDenominator + 0.5);
     // Rounding Function

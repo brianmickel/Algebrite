@@ -20,7 +20,7 @@ import { integer } from './bignum';
 import { coeff } from './coeff';
 import { equaln, ispolyexpandedform, isZeroAtomOrTensor } from './is';
 import { makeList } from './list';
-import {symbol} from "../runtime/symbol";
+import { symbol } from "../runtime/symbol";
 
 export function bake(p1: U): U {
   return doexpand(_bake, p1);
@@ -33,28 +33,35 @@ function _bake(p1: U): U {
   const y = ispolyexpandedform(p1, symbol(SYMBOL_Y));
   const z = ispolyexpandedform(p1, symbol(SYMBOL_Z));
 
-  let result: U;
   if (s && !t && !x && !y && !z) {
-    result = bake_poly(p1, symbol(SYMBOL_S));
-  } else if (!s && t && !x && !y && !z) {
-    result = bake_poly(p1, symbol(SYMBOL_T));
-  } else if (!s && !t && x && !y && !z) {
-    result = bake_poly(p1, symbol(SYMBOL_X));
-  } else if (!s && !t && !x && y && !z) {
-    result = bake_poly(p1, symbol(SYMBOL_Y));
-  } else if (!s && !t && !x && !y && z) {
-    result = bake_poly(p1, symbol(SYMBOL_Z));
+    return bake_poly(p1, symbol(SYMBOL_S));
+  }
+
+  if (!s && t && !x && !y && !z) {
+    return bake_poly(p1, symbol(SYMBOL_T));
+  }
+
+  if (!s && !t && x && !y && !z) {
+    return bake_poly(p1, symbol(SYMBOL_X));
+  }
+
+  if (!s && !t && !x && y && !z) {
+    return bake_poly(p1, symbol(SYMBOL_Y));
+  }
+
+  if (!s && !t && !x && !y && z) {
+    return bake_poly(p1, symbol(SYMBOL_Z));
     // don't bake the contents of some constructs such as "for"
     // because we don't want to evaluate the body of
     // such constructs "statically", i.e. without fully running
     // the loops.
-  } else if (iscons(p1) && car(p1) !== symbol(FOR)) {
-    result = makeList(car(p1), ...p1.tail().map(bake));
-  } else {
-    result = p1;
+  }
+  
+  if (iscons(p1) && car(p1) !== symbol(FOR)) {
+    return makeList(car(p1), ...p1.tail().map(bake));
   }
 
-  return result;
+  return p1;
 }
 
 export function polyform(p1: U, p2: U): U {

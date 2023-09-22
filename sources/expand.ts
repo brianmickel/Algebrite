@@ -343,18 +343,17 @@ function expand_get_CF(p2: U, p5: U, p9: U): U[] {
 
 // Returns T = A/F where F is a factor of A.
 function trivial_divide(p2: U, p5: U): U {
-  let result: U = Constants.one;
-  if (ismultiply(p2)) {
-    const arr: U[] = [];
-    p2.tail().forEach((p0) => {
-      if (!equal(p0, p5)) {
-        // force expansion of (x+1)^2, f.e.
-        arr.push(Eval(p0));
-      }
-    });
-    result = multiply_all(arr);
+  if (!ismultiply(p2)) {
+    return Constants.one
   }
-  return result;
+  const arr: U[] = [];
+  p2.tail().forEach((p0) => {
+    if (!equal(p0, p5)) {
+      // force expansion of (x+1)^2, f.e.
+      arr.push(Eval(p0));
+    }
+  });
+  return multiply_all(arr);
 }
 
 // Returns the expansion coefficient vector B.

@@ -297,11 +297,10 @@ export function Eval_do(p1: U) {
 }
 
 export function Eval_dsolve(p1: U) {
-  const a = Eval(cadr(p1));
-  const b = Eval(caddr(p1));
-  const c = Eval(cadddr(p1));
+  Eval(cadr(p1));
+  Eval(caddr(p1));
+  Eval(cadddr(p1));
   stop('dsolve');
-  //return dsolve(a, b, c);
 }
 
 // for example, Eval(f,x,2)

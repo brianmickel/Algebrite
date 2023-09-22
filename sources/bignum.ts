@@ -317,11 +317,8 @@ export function convert_rational_to_double(p: Num): number {
     breakpoint;
   }
   const quotientAndRemainder = p.q.a.divmod(p.q.b);
-  const result =
-    quotientAndRemainder.quotient.toJSNumber() +
+  return quotientAndRemainder.quotient.toJSNumber() +
     quotientAndRemainder.remainder.toJSNumber() / p.q.b.toJSNumber();
-
-  return result;
 }
 
 export function integer(n: number): Num {

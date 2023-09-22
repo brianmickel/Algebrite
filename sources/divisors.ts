@@ -137,16 +137,15 @@ function gen(stack: U[], h: number, k: number): void {
 //-----------------------------------------------------------------------------
 function __factor_add(p1: U): U[] {
   // get gcd of all terms
-  const temp1 = iscons(p1) ? p1.tail().reduce(gcd) : car(p1);
+  const allTermsGCD = iscons(p1) ? p1.tail().reduce(gcd) : car(p1);
 
   const stack: U[] = [];
   // check gcd
-  let p2 = temp1;
-  if (isplusone(p2)) {
-    stack.push(p1, Constants.one);
-    return stack;
+  if (isplusone(allTermsGCD)) {
+    return [p1, Constants.one];
   }
 
+  let p2 = allTermsGCD;
   // push factored gcd
   if (isNumericAtom(p2)) {
     stack.push(...factor_small_number(nativeInt(p2)));

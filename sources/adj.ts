@@ -1,5 +1,5 @@
 import { alloc_tensor } from '../runtime/alloc';
-import { cadr, U } from '../runtime/defs';
+import { cadr, Tensor, U } from '../runtime/defs';
 import { stop } from '../runtime/run';
 import { cofactor } from './cofactor';
 import { Eval } from './eval';
@@ -30,18 +30,21 @@ export function adj(p1: U): U {
   }
 
   const n = p1.tensor.dim[0];
-
-  const p2 = alloc_tensor(n * n);
-
-  p2.tensor.ndim = 2;
-  p2.tensor.dim[0] = n;
-  p2.tensor.dim[1] = n;
+  const p2 = allocSquareTensor(n);
 
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
       p2.tensor.elem[n * j + i] = cofactor(p1, n, i, j);
     }
-  } // transpose
+  }
 
+  return p2;
+}
+
+function allocSquareTensor(n: number): Tensor<U> {
+  const p2 = alloc_tensor(n * n);
+  p2.tensor.ndim = 2;
+  p2.tensor.dim[0] = n;
+  p2.tensor.dim[1] = n;
   return p2;
 }

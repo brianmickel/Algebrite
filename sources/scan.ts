@@ -1,7 +1,7 @@
 import { alloc_tensor } from '../runtime/alloc';
 import {
-  ADD, Constants,
-  DEBUG,
+  ADD,
+  Constants,
   defs,
   dotprod_unicode,
   EVAL,
@@ -119,16 +119,6 @@ let assignmentFound: boolean = null;
 // Returns zero when nothing left to scan.
 let scanned = '';
 export function scan(s: string): [number, U] {
-  if (DEBUG) {
-    console.log(`#### scanning ${s}`);
-  }
-  //if s=="y=x"
-  //  breakpoint
-  //if s=="y"
-  //  breakpoint
-  //if s=="i=sqrt(-1)"
-  //  breakpoint
-
   lastFoundSymbol = null;
   symbolsRightOfAssignment = [];
   symbolsLeftOfAssignment = [];
@@ -188,9 +178,6 @@ function scan_stmt(): U {
 
   if (token === T_QUOTASSIGN || token === '=') {
     const symbolLeftOfAssignment = lastFoundSymbol;
-    if (DEBUG) {
-      console.log('assignment!');
-    }
     assignmentFound = true;
     isSymbolLeftOfAssignment = false;
 
@@ -221,12 +208,6 @@ function scan_stmt(): U {
       }
 
       // print out the immediate dependencies
-      if (DEBUG) {
-        console.log(`locally, ${symbolLeftOfAssignment} depends on: `);
-        for (const i of Array.from(symbolsRightOfAssignment)) {
-          console.log(`  ${i}`);
-        }
-      }
 
       // ok add the local dependencies to the existing
       // dependencies of this left-value symbol
@@ -517,11 +498,6 @@ function addSymbolRightOfAssignment(theSymbol: string) {
     symbolsRightOfAssignment.indexOf("'" + theSymbol) === -1 &&
     !skipRootVariableToBeSolved
   ) {
-    if (DEBUG) {
-      console.log(
-        `... adding symbol: ${theSymbol} to the set of the symbols right of assignment`
-      );
-    }
     let prefixVar = '';
     for (let i = 1; i < functionInvokationsScanningStack.length; i++) {
       if (functionInvokationsScanningStack[i] !== '') {
@@ -543,11 +519,6 @@ function addSymbolLeftOfAssignment(theSymbol: string) {
     symbolsLeftOfAssignment.indexOf("'" + theSymbol) === -1 &&
     !skipRootVariableToBeSolved
   ) {
-    if (DEBUG) {
-      console.log(
-        `... adding symbol: ${theSymbol} to the set of the symbols left of assignment`
-      );
-    }
     let prefixVar = '';
     for (let i = 1; i < functionInvokationsScanningStack.length; i++) {
       if (functionInvokationsScanningStack[i] !== '') {
@@ -584,26 +555,14 @@ function scan_symbol(): U {
   }
   //console.log "found symbol: " + token_buf
   if (scanningParameters.length === 0) {
-    if (DEBUG) {
-      console.log(`out of scanning parameters, processing ${token_buf}`);
-    }
     lastFoundSymbol = token_buf;
     if (isSymbolLeftOfAssignment) {
       addSymbolLeftOfAssignment(token_buf);
     }
   } else {
-    if (DEBUG) {
-      console.log(`still scanning parameters, skipping ${token_buf}`);
-    }
     if (isSymbolLeftOfAssignment) {
       addSymbolRightOfAssignment("'" + token_buf);
     }
-  }
-
-  if (DEBUG) {
-    console.log(
-      `found symbol: ${token_buf} left of assignment: ${isSymbolLeftOfAssignment}`
-    );
   }
 
   // if we were looking at the right part of an assignment while we
@@ -623,9 +582,6 @@ function scan_string(): U {
 }
 
 function scan_function_call_with_function_name(): U {
-  if (DEBUG) {
-    console.log('-- scan_function_call_with_function_name start');
-  }
   let n = 1; // the parameter number as we scan parameters
   const p = usr_symbol(token_buf);
 
@@ -831,17 +787,10 @@ function scan_function_call_with_function_name(): U {
     defs.patternHasBeenFound = true;
   }
 
-  if (DEBUG) {
-    console.log('-- scan_function_call_with_function_name end');
-  }
   return makeList(...fcall);
 }
 
 function scan_function_call_without_function_name(lhs: U): U {
-  if (DEBUG) {
-    console.log('-- scan_function_call_without_function_name start');
-  }
-
   // the function will have to be looked up
   // at runtime (i.e. we need to evaulate something to find it
   // e.g. it might be inside a tensor, so we'd need to evaluate
@@ -868,9 +817,6 @@ function scan_function_call_without_function_name(lhs: U): U {
 
   get_next_token();
 
-  if (DEBUG) {
-    console.log(`-- scan_function_call_without_function_name end: ${fcall[fcall.length-1]}`);
-  }
   return makeList(...fcall);
 }
 
@@ -971,9 +917,6 @@ function get_next_token() {
       break;
     }
     newline_flag = 1;
-  }
-  if (DEBUG) {
-    console.log(`get_next_token token: ${token}`);
   }
   return token;
 }

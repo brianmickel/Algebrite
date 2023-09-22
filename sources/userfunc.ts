@@ -1,7 +1,6 @@
 import {
   car,
   cdr,
-  DEBUG,
   EVAL,
   FUNCTION,
   iscons,
@@ -51,10 +50,6 @@ Returns the partial derivative of f with respect to x. x can be a vector e.g. [x
 */
 export function Eval_user_function(p1: U): U {
   // Use "derivative" instead of "d" if there is no user function "d"
-
-  if (DEBUG) {
-    console.log(`Eval_user_function evaluating: ${car(p1)}`);
-  }
   if (
     car(p1) === symbol(SYMBOL_D) &&
     get_binding(symbol(SYMBOL_D)) === symbol(SYMBOL_D)

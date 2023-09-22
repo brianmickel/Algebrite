@@ -3,7 +3,6 @@ import {
   ADD,
   cadr,
   Constants,
-  DEBUG,
   E,
   evalFloats,
   iscons,
@@ -33,13 +32,6 @@ function checkFloatHasWorkedOutCompletely(nodeToCheck) {
   const numberOfEs = countOccurrencesOfSymbol(symbol(E), nodeToCheck);
   const numberOfMults = countOccurrencesOfSymbol(symbol(MULTIPLY), nodeToCheck);
   const numberOfSums = countOccurrencesOfSymbol(symbol(ADD), nodeToCheck);
-  if (DEBUG) {
-    console.log(`     ... numberOfPowers: ${numberOfPowers}`);
-    console.log(`     ... numberOfPIs: ${numberOfPIs}`);
-    console.log(`     ... numberOfEs: ${numberOfEs}`);
-    console.log(`     ... numberOfMults: ${numberOfMults}`);
-    console.log(`     ... numberOfSums: ${numberOfSums}`);
-  }
   if (
     numberOfPowers > 1 ||
     numberOfPIs > 0 ||

@@ -1,5 +1,5 @@
 import { lcm } from './lcm';
-import { Constants, DEBUG, defs, issymbol, noexpand, U } from '../runtime/defs';
+import { Constants, issymbol, noexpand, U } from '../runtime/defs';
 import { Find } from '../runtime/find';
 import { stop } from '../runtime/run';
 import { equal } from '../sources/misc';
@@ -111,11 +111,6 @@ function yyfactorpoly(p1: U, p2: U): U {
         continue;
       } else {
         p8 = add(multiply(p4, p2), p5); // A, x, B
-
-        if (DEBUG) {
-          console.log(`success\nFACTOR=${p8}`);
-        }
-
         // factor out negative sign (not req'd because p4 > 1)
         //if 0
         /*
@@ -170,9 +165,6 @@ function yyfactorpoly(p1: U, p2: U): U {
         //  negate()
         //  negate_noexpand()
 
-        if (DEBUG) {
-          console.log(`success\nFACTOR=${p8}`);
-        }
 
         // factor out negative sign (not req'd because p4 > 1)
         //if 0
@@ -226,18 +218,6 @@ function yyfactorpoly(p1: U, p2: U): U {
         const checkingTheDivision = multiply(remainingPoly, p8);
 
         if (!equal(checkingTheDivision, dividend)) {
-          //push(dividend)
-          //gcd_sum()
-          //console.log("gcd top of stack: " + stack[tos-1].toString())
-
-          if (DEBUG) {
-            console.log(
-              "we found a polynomial based on complex root and its conj but it doesn't divide the poly, quitting"
-            );
-            console.log(
-              `so just returning previousFactorisation times dividend: ${previousFactorisation} * ${dividend}`
-            );
-          }
           return multiply_noexpand(previousFactorisation, noexpand(yycondense, dividend));
         }
 
@@ -277,10 +257,6 @@ function yyfactorpoly(p1: U, p2: U): U {
   }
   p1 = temp;
 
-  if (DEBUG) {
-    console.log(`POLY=${p1}`);
-  }
-
   p1 = noexpand(yycondense, p1);
 
   //console.log("new poly with extracted common factor: " + p1)
@@ -297,11 +273,6 @@ function yyfactorpoly(p1: U, p2: U): U {
   }
 
   p7 = multiply_noexpand(p7, p1);
-
-  if (DEBUG) {
-    console.log(`RESULT=${p7}`);
-  }
-
   return p7;
 }
 
@@ -319,9 +290,6 @@ function rationalize_coefficients(coefficients: U[]): U {
 
   // reciprocate RESULT
   p7 = reciprocate(p7);
-  if (DEBUG) {
-    console.log('rationalize_coefficients result');
-  }
   return p7;
 }
 //console.log print_list(p7)
@@ -334,35 +302,12 @@ function get_factor_from_real_root(
   p5: U
 ): [boolean, U, U] {
   let p1: U, p3: U, p6: U;
-
-  if (DEBUG) {
-    let temp: U = Constants.zero;
-    for (let i = 0; i <= factpoly_expo; i++) {
-      temp = add(temp, multiply(polycoeff[i], power(p2, integer(i))));
-    }
-    p1 = temp;
-    console.log(`POLY=${p1}`);
-  }
-
   const an = ydivisors(polycoeff[factpoly_expo]);
-
   const a0 = ydivisors(polycoeff[0]);
-
-  if (DEBUG) {
-    console.log('divisors of base term');
-    for (let i = 0; i < a0.length; i++) {
-      console.log(`, ${a0[i]}`);
-    }
-    console.log('divisors of leading term');
-    for (let i = 0; i < an.length; i++) {
-      console.log(`, ${an[i]}`);
-    }
-  }
 
   // try roots
   for (let rootsTries_i = 0; rootsTries_i < an.length; rootsTries_i++) {
     for (let rootsTries_j = 0; rootsTries_j < a0.length; rootsTries_j++) {
-      //if DEBUG then console.log "nan: " + nan + " na0: " + na0 + " i: " + rootsTries_i + " j: " + rootsTries_j
       p4 = an[rootsTries_i];
       p5 = a0[rootsTries_j];
 
@@ -370,16 +315,8 @@ function get_factor_from_real_root(
 
       p6 = Evalpoly(p3, polycoeff, factpoly_expo);
 
-      if (DEBUG) {
-        console.log(
-          `try A=${p4}\n, B=${p5}\n, root ${p2}\n=-B/A=${p3}\n, POLY(${p3}\n)=${p6}`
-        );
-      }
 
       if (isZeroAtomOrTensor(p6)) {
-        if (DEBUG) {
-          console.log('get_factor_from_real_root returning true');
-        }
         return [true, p4, p5];
       }
 
@@ -389,24 +326,12 @@ function get_factor_from_real_root(
 
       p6 = Evalpoly(p3, polycoeff, factpoly_expo);
 
-      if (DEBUG) {
-        console.log(
-          `try A=${p4}\n, B=${p5}\n, root ${p2}\n=-B/A=${p3}\n, POLY(${p3}\n)=${p6}`
-        );
-      }
-
       if (isZeroAtomOrTensor(p6)) {
-        if (DEBUG) {
-          console.log('get_factor_from_real_root returning true');
-        }
         return [true, p4, p5];
       }
     }
   }
 
-  if (DEBUG) {
-    console.log('get_factor_from_real_root returning false');
-  }
   return [false, p4, p5];
 }
 
@@ -418,34 +343,17 @@ function get_factor_from_complex_root(
   let p1: U, p4: U, p3: U, p6: U;
 
   if (factpoly_expo <= 2) {
-    if (DEBUG) {
-      console.log(
-        'no more factoring via complex roots to be found in polynomial of degree <= 2'
-      );
-    }
     return [false, p4];
   }
 
   p1 = remainingPoly;
-  if (DEBUG) {
-    console.log(`complex root finding for POLY=${p1}`);
-  }
 
   // trying -1^(2/3) which generates a polynomial in Z
   // generates x^2 + 2x + 1
   p4 = rect(power(Constants.negOne, rational(2, 3)));
-  if (DEBUG) {
-    console.log(`complex root finding: trying with ${p4}`);
-  }
   p3 = p4;
   p6 = Evalpoly(p3, polycoeff, factpoly_expo);
-  if (DEBUG) {
-    console.log(`complex root finding result: ${p6}`);
-  }
   if (isZeroAtomOrTensor(p6)) {
-    if (DEBUG) {
-      console.log('get_factor_from_complex_root returning true');
-    }
     return [true, p4];
   }
 
@@ -453,18 +361,9 @@ function get_factor_from_complex_root(
   // http://www.wolframalpha.com/input/?i=(1)%5E(2%2F3)
   // generates x^2 - 2x + 1
   p4 = rect(power(Constants.one, rational(2, 3)));
-  if (DEBUG) {
-    console.log(`complex root finding: trying with ${p4}`);
-  }
   p3 = p4;
   p6 = Evalpoly(p3, polycoeff, factpoly_expo);
-  if (DEBUG) {
-    console.log(`complex root finding result: ${p6}`);
-  }
   if (isZeroAtomOrTensor(p6)) {
-    if (DEBUG) {
-      console.log('get_factor_from_complex_root returning true');
-    }
     return [true, p4];
   }
 
@@ -478,25 +377,17 @@ function get_factor_from_complex_root(
           multiply(integer(rootsTries_j), Constants.imaginaryunit)
         )
       );
-      //console.log("complex root finding: trying simple complex combination: " + p4)
 
       const p3 = p4;
 
       const p6 = Evalpoly(p3, polycoeff, factpoly_expo);
 
-      //console.log("complex root finding result: " + p6)
       if (isZeroAtomOrTensor(p6)) {
-        if (DEBUG) {
-          console.log(`found complex root: ${p6}`);
-        }
         return [true, p4];
       }
     }
   }
 
-  if (DEBUG) {
-    console.log('get_factor_from_complex_root returning false');
-  }
   return [false, p4];
 }
 
@@ -524,19 +415,11 @@ function yydivpoly(p4: U, p5: U, polycoeff: U[], factpoly_expo: number) {
     polycoeff[i - 1] = subtract(polycoeff[i - 1], multiply(p6, p5));
   }
   polycoeff[0] = p6;
-  if (DEBUG) {
-    console.log('yydivpoly Q:');
-  }
 }
-//console.log print_list(p6)
 
 function Evalpoly(p3: U, polycoeff: U[], factpoly_expo: number): U {
   let temp: U = Constants.zero;
   for (let i = factpoly_expo; i >= 0; i--) {
-    if (DEBUG) {
-      console.log('Evalpoly top of stack:');
-      console.log(print_list(temp));
-    }
     temp = add(multiply(temp, p3), polycoeff[i]);
   }
   return temp;

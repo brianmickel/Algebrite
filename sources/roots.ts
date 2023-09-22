@@ -4,7 +4,6 @@ import {
   cadr,
   car,
   Constants,
-  DEBUG,
   defs,
   ismultiply,
   ispower,
@@ -29,14 +28,6 @@ import { iscomplexnumber, ispolyexpandedform, isposint, isZeroAtomOrTensor } fro
 import { divide, multiply, negate } from './multiply';
 import { power } from './power';
 import { simplify } from './simplify';
-
-const log = {
-  debug: (str: string) => {
-    if (DEBUG) {
-      console.log(str);
-    }
-  },
-};
 
 const flatten = (arr: any[]) => [].concat(...arr);
 
@@ -105,13 +96,11 @@ export function roots(POLY: U, X: U): U {
     return symbol(NIL);
   }
 
-  log.debug(`checking if ${POLY} is a case of simple roots`);
 
   const k = normalisedCoeff(POLY, X);
 
   const results = [];
   if (isSimpleRoot(k)) {
-    log.debug(`yes, ${k[k.length - 1]} is a case of simple roots`);
     const kn = k.length;
     const lastCoeff = k[0];
     const leadingCoeff = k.pop();
@@ -149,8 +138,6 @@ export function roots(POLY: U, X: U): U {
 // leadingCoeff    Coefficient of x^0
 // lastCoeff       Coefficient of x^(n-1)
 function getSimpleRoots(n: number, leadingCoeff: U, lastCoeff: U):U[] {
-  log.debug('getSimpleRoots');
-
   n = n - 1;
 
   const commonPart = divide(
@@ -330,12 +317,6 @@ function _solveDegree3(A: U, B: U, C: U, D: U): U[] {
     power(subtract(power(R_DELTA1, integer(2)), R_4_DELTA03), rational(1, 2))
       );
 
-  log.debug('>>>>>>>>>>>>>>>> actually using cubic formula <<<<<<<<<<<<<<< ');
-  log.debug(`cubic: D0: ${R_DELTA0}`);
-  log.debug(`cubic: D0 as float: ${R_DELTA0_toBeCheckedIfZero}`);
-  log.debug(`cubic: DETERMINANT: ${R_determinant}`);
-  log.debug(`cubic: D1: ${R_DELTA1}`);
-
       if (isZeroAtomOrTensor(R_determinant)) {
     const data = {
       R_DELTA0_toBeCheckedIfZero,
@@ -359,11 +340,7 @@ function _solveDegree3(A: U, B: U, C: U, D: U): U[] {
         );
         const R_C_simplified_toCheckIfZero = absValFloat(simplify(R_C));
 
-    log.debug(`cubic: C: ${R_C}`);
-    log.debug(`cubic: C as absval and float: ${R_C_simplified_toCheckIfZero}`);
-
         if (isZeroAtomOrTensor(R_C_simplified_toCheckIfZero)) {
-      log.debug(' cubic: C IS ZERO flipping the sign');
           flipSignOFQSoCIsNotZero = true;
         } else {
           C_CHECKED_AS_NOT_ZERO = true;
@@ -437,10 +414,8 @@ function _solveDegree3ZeroRDeterminant(
     R_a_b_c,
   } = common;
   if (isZeroAtomOrTensor(R_DELTA0_toBeCheckedIfZero)) {
-    log.debug(' cubic: DETERMINANT IS ZERO and delta0 is zero');
     return [R_m_b_over_3a]; // just same solution three times
   }
-  log.debug(' cubic: DETERMINANT IS ZERO and delta0 is not zero');
 
   const rootSolution = divide(
     subtract(multiply(A, multiply(D, integer(9))), multiply(B, C)),
@@ -468,8 +443,6 @@ function _solveDegree3ZeroRDeterminant(
 }
 
 function _solveDegree4(A: U, B: U, C: U, D: U, E: U): U[] {
-  log.debug('>>>>>>>>>>>>>>>> actually using quartic formula <<<<<<<<<<<<<<< ');
-
       if (
     isZeroAtomOrTensor(B) &&
     isZeroAtomOrTensor(D) &&
@@ -487,8 +460,6 @@ function _solveDegree4(A: U, B: U, C: U, D: U, E: U): U[] {
 }
 
 function _solveDegree4Biquadratic(A: U, B: U, C: U, D: U, E: U): U[] {
-  log.debug('biquadratic case');
-
   const biquadraticSolutions = roots(
     add(
       multiply(A, power(symbol(SECRETX), integer(2))),
@@ -532,26 +503,20 @@ function _solveDegree4ZeroB(A: U, B: U, C: U, D: U, E: U): U[] {
             )
           );
 
-  log.debug(`resolventCubic: ${arg1}`);
 
   const resolventCubicSolutions = roots(arg1, symbol(SECRETX)) as Tensor;
-  log.debug(`resolventCubicSolutions: ${resolventCubicSolutions}`);
 
         let R_m = null;
         //R_m = resolventCubicSolutions.tensor.elem[1]
   for (const sol of resolventCubicSolutions.tensor.elem) {
-    log.debug(`examining solution: ${sol}`);
 
     const toBeCheckedIfZero = absValFloat(add(multiply(sol, integer(2)), R_p));
-    log.debug(`abs value is: ${sol}`);
 
     if (!isZeroAtomOrTensor(toBeCheckedIfZero)) {
       R_m = sol;
             break;
           }
         }
-
-  log.debug(`chosen solution: ${R_m}`);
 
         const sqrtPPlus2M = simplify(
           power(add(multiply(R_m, integer(2)), R_p), rational(1, 2))
@@ -635,19 +600,8 @@ function _solveDegree4NonzeroB(A: U, B: U, C: U, D: U, E: U): U[] {
   const simplified = simplify(add_all([four_x_4, r_q_x_2, r_q_x, R_r]));
   const depressedSolutions = roots(simplified, symbol(SECRETX)) as Tensor;
 
-  log.debug(`p for depressed quartic: ${R_p}`);
-  log.debug(`q for depressed quartic: ${R_q}`);
-  log.debug(`r for depressed quartic: ${R_r}`);
-  log.debug(`4 * x^4: ${four_x_4}`);
-  log.debug(`R_p * x^2: ${r_q_x_2}`);
-  log.debug(`R_q * x: ${r_q_x}`);
-  log.debug(`R_r: ${R_r}`);
-  log.debug(`solving depressed quartic: ${simplified}`);
-  log.debug(`depressedSolutions: ${depressedSolutions}`);
-
   return depressedSolutions.tensor.elem.map((sol) => {
     const result = simplify(subtract(sol, divide(B, multiply(integer(4), A))));
-    log.debug(`solution from depressed: ${result}`);
     return result;
   });
 }

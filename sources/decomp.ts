@@ -4,7 +4,7 @@ import {
   car,
   cdr,
   Cons,
-  DEBUG, isadd,
+  isadd,
   iscons,
   ismultiply, NIL, U
 } from '../runtime/defs';
@@ -50,23 +50,13 @@ function pushTryNotToDuplicateLocal(localStack: U[], item: U) {
 
 // returns constant expressions on the stack
 export function decomp(generalTransform: boolean, p1: U, p2: U): U[] {
-  if (DEBUG) {
-    console.log(`DECOMPOSING ${p1}`);
-  }
-
   // is the entire expression constant?
   if (generalTransform) {
     if (!iscons(p1)) {
-      if (DEBUG) {
-        console.log(` ground thing: ${p1}`);
-      }
       return [p1];
     }
   } else {
     if (!Find(p1, p2)) {
-      if (DEBUG) {
-        console.log(' entire expression is constant');
-      }
       return [p1];
     }
   }
@@ -84,10 +74,6 @@ export function decomp(generalTransform: boolean, p1: U, p2: U): U[] {
   let p3: U = cdr(p1);
 
   // naive decomp if not sum or product
-  if (DEBUG) {
-    console.log(' naive decomp');
-    console.log(`startig p3: ${p3}`);
-  }
   const stack = [];
   while (iscons(p3)) {
     // for a general transformations,
@@ -98,11 +84,6 @@ export function decomp(generalTransform: boolean, p1: U, p2: U): U[] {
       stack.push(car(p3));
     }
 
-    if (DEBUG) {
-      console.log('recursive decomposition');
-      console.log(`car(p3): ${car(p3)}`);
-      console.log(`p2: ${p2}`);
-    }
     stack.push(...decomp(generalTransform, car(p3), p2));
     p3 = cdr(p3);
   }
@@ -110,10 +91,6 @@ export function decomp(generalTransform: boolean, p1: U, p2: U): U[] {
 }
 
 function decomp_sum(generalTransform: boolean, p1: U, p2: U): U[] {
-  if (DEBUG) {
-    console.log(' decomposing the sum ');
-  }
-
   // decomp terms involving x
   let p3: U = cdr(p1);
 
@@ -137,10 +114,6 @@ function decomp_sum(generalTransform: boolean, p1: U, p2: U): U[] {
 }
 
 function decomp_product(generalTransform: boolean, p1: U, p2: U): U[] {
-  if (DEBUG) {
-    console.log(' decomposing the product ');
-  }
-
   // decomp factors involving x
   let p3: U = cdr(p1);
   const stack = [];

@@ -8,7 +8,6 @@ import {
   cdr,
   Constants,
   COS,
-  DEBUG,
   defs,
   do_simplify_nested_radicals,
   FACTORIAL,
@@ -98,20 +97,8 @@ function runUserDefinedSimplifications(p: U): U {
     return p;
     }
 
-    if (DEBUG) {
-    console.log(`runUserDefinedSimplifications passed: ${p}`);
-  }
-  let F1 = noexpand(Eval, p);
-  if (DEBUG) {
-    console.log(`runUserDefinedSimplifications after eval no expanding: ${F1}`);
-      console.log('patterns to be checked: ');
-    for (const simplification of Array.from(
-      defs.userSimplificationsInListForm
-    )) {
-      console.log(`...${simplification}`);
-      }
-    }
 
+  let F1 = noexpand(Eval, p);
     let atLeastOneSuccessInRouldOfRulesApplications = true;
     let numberOfRulesApplications = 0;
 
@@ -132,17 +119,9 @@ function runUserDefinedSimplifications(p: U): U {
             MAX_CONSECUTIVE_APPLICATIONS_OF_SINGLE_RULE
         ) {
           eachConsecutiveRuleApplication++;
-          if (DEBUG) {
-            console.log(
-            `simplify - checking pattern: ${eachSimplification} on: ${F1}`
-            );
-          }
         [F1, success] = transform(F1, symbol(NIL), eachSimplification, true);
           if (success) {
             atLeastOneSuccessInRouldOfRulesApplications = true;
-          }
-          if (DEBUG) {
-          console.log(`p1 at this stage of simplification: ${F1}`);
           }
         }
         if (
@@ -160,11 +139,6 @@ function runUserDefinedSimplifications(p: U): U {
       stop('maximum application of all transformation rules exceeded ');
     }
 
-    if (DEBUG) {
-      console.log(`METAX = ${get_binding(symbol(METAX))}`);
-      console.log(`METAA = ${get_binding(symbol(METAA))}`);
-      console.log(`METAB = ${get_binding(symbol(METAB))}`);
-    }
   return F1;
 }
 
@@ -229,9 +203,6 @@ export function simplify(p1: U): U {
     // e.g. simplify(14^(1/2) - (16 - 4*7^(1/2))^(1/2))
     // needs some more semplification after the de-nesting.
     if (simplify_nested_radicalsResult) {
-      if (DEBUG) {
-        console.log('de-nesting successful into: ' + p1.toString());
-      }
       return simplify(p1);
     }
   }
@@ -298,9 +269,6 @@ function f10(p1: U): U {
       car(car(cdr(p1))) === symbol(TRANSPOSE) &&
       car(car(cdr(cdr(p1)))) === symbol(TRANSPOSE)
     ) {
-      if (DEBUG) {
-        console.log(`maybe collecting a transpose ${p1}`);
-      }
       const a = cadr(car(cdr(p1)));
       const b = cadr(car(cdr(cdr(p1))));
       let arg1:U;
@@ -319,9 +287,6 @@ function f10(p1: U): U {
 
       if (count(p2) < count(p1)) {
         p1 = p2;
-      }
-      if (DEBUG) {
-        console.log(`collecting a transpose ${p2}`);
       }
     }
   }
@@ -446,10 +411,6 @@ function simplify_rectToClock(p1: U): U {
 
   p2 = clockform(Eval(p1)); // put new (hopefully simplified expr) in p2
 
-  if (DEBUG) {
-    console.log(`before simplification clockform: ${p1} after: ${p2}`);
-  }
-
   if (count(p2) < count(p1)) {
     p1 = p2;
   }
@@ -496,9 +457,6 @@ function nterms(p: U) {
 
 function simplify_nested_radicals(p1: U): [boolean, U] {
   if (defs.recursionLevelNestedRadicalsRemoval > 0) {
-    if (DEBUG) {
-      console.log('denesting bailing out because of too much recursion');
-    }
     return [false, p1];
   }
 
@@ -537,9 +495,6 @@ function simplify_nested_radicals(p1: U): [boolean, U] {
 
 function take_care_of_nested_radicals(p1: U): [U, boolean] {
   if (defs.recursionLevelNestedRadicalsRemoval > 0) {
-    if (DEBUG) {
-      console.log('denesting bailing out because of too much recursion');
-    }
     return [p1, false];
   }
 
@@ -649,9 +604,6 @@ function _nestedPowerSymbol(p1: U): [U, boolean] {
   const r = roots(temp, symbol(SECRETX));
       defs.recursionLevelNestedRadicalsRemoval--;
   if (equal(r, symbol(NIL))) {
-        if (DEBUG) {
-          console.log('roots bailed out because of too much recursion');
-        }
     return [p1, false];
       }
 

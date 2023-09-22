@@ -7,8 +7,6 @@ import {
   cddr,
   cdr,
   Constants,
-  DEBUG,
-  defs,
   iscons,
   isNumericAtom,
   METAA,
@@ -74,23 +72,12 @@ export function transform(
   s: string[] | U,
   generalTransform: boolean
 ): [U, boolean] {
-  if (DEBUG) {
-    console.log(`         !!!!!!!!!   transform on: ${F}`);
-  }
-
   const state = saveMetaBindings();
 
   set_binding(symbol(METAX), X);
 
   const arg = polyform(F, X); // collect coefficients of x, x^2, etc.
   const result = decomp(generalTransform, arg, X);
-
-  if (DEBUG) {
-    console.log(`  ${result.length} decomposed elements ====== `);
-    for (let i = 0; i < result.length; i++) {
-      console.log(`  decomposition element ${i}: ${result[i]}`);
-    }
-  }
 
   let transformationSuccessful = false;
   let B: U;
@@ -116,10 +103,6 @@ export function transform(
     // being let's just skip matching on simple numbers.
     if (!isNumericAtom(F)) {
       const theTransform = s as U;
-      if (DEBUG) {
-        console.log(`applying transform: ${theTransform}`);
-        console.log(`scanning table entry ${theTransform}`);
-      }
 
       // replacements of meta variables. Note that we don't
       // use scan_meta because the pattern is not a string
@@ -138,9 +121,6 @@ export function transform(
       const p1 = subst(expr, symbol(SYMBOL_X_UNDERSCORE), symbol(METAX));
 
       const A = car(p1);
-      if (DEBUG) {
-        console.log(`template expression: ${A}`);
-      }
       B = cadr(p1);
       const C = cddr(p1);
 
@@ -151,10 +131,6 @@ export function transform(
         // the match failed but perhaps we can match something lower down in
         // the tree, so let's recurse the tree
 
-        if (DEBUG) {
-          console.log(`p3 at this point: ${F}`);
-          console.log(`car(p3): ${car(F)}`);
-        }
         const transformedTerms: U[] = [];
 
         let restTerm: U = F;
@@ -168,10 +144,6 @@ export function transform(
           const secondTerm = car(restTerm);
           restTerm = cdr(restTerm);
 
-          if (DEBUG) {
-            console.log(`testing: ${secondTerm}`);
-            console.log(`about to try to simplify other term: ${secondTerm}`);
-          }
           const [t, success] = transform(
             secondTerm,
             symbol(NIL),
@@ -181,14 +153,6 @@ export function transform(
           transformationSuccessful = transformationSuccessful || success;
 
           transformedTerms.push(t);
-
-          if (DEBUG) {
-            console.log(
-              `tried to simplify other term: ${secondTerm} ...successful?: ${success} ...transformed: ${
-                transformedTerms[transformedTerms.length - 1]
-              }`
-            );
-          }
         }
 
         // recreate the tree we were passed,
@@ -201,16 +165,6 @@ export function transform(
   } else {
     // "integrals" mode
     for (let eachTransformEntry of Array.from(s as string[])) {
-      if (DEBUG) {
-        console.log(`scanning table entry ${eachTransformEntry}`);
-        if (
-          (eachTransformEntry + '').indexOf(
-            'f(sqrt(a+b*x),2/3*1/b*sqrt((a+b*x)^3))'
-          ) !== -1
-        ) {
-          breakpoint;
-        }
-      }
       if (eachTransformEntry) {
         const temp = scan_meta(eachTransformEntry as string);
 
@@ -270,15 +224,8 @@ function f_equals_a(
 ): boolean {
   for (const fea_i of stack) {
     set_binding(symbol(METAA), fea_i);
-    if (DEBUG) {
-      console.log(`  binding METAA to ${get_binding(symbol(METAA))}`);
-    }
     for (const fea_j of stack) {
       set_binding(symbol(METAB), fea_j);
-      if (DEBUG) {
-        console.log(`  binding METAB to ${get_binding(symbol(METAB))}`);
-      }
-
       // now test all the conditions (it's an and between them)
       let temp = C;
       while (iscons(temp)) {
@@ -294,24 +241,7 @@ function f_equals_a(
         continue;
       }
       const arg2 = generalTransform ? noexpand(Eval, A) : Eval(A);
-
-      if (DEBUG) {
-        console.log(
-          `about to evaluate template expression: ${A} binding METAA to ${get_binding(
-            symbol(METAA)
-          )} and binding METAB to ${get_binding(
-            symbol(METAB)
-          )} and binding METAX to ${get_binding(symbol(METAX))}`
-        );
-        console.log(`  comparing ${arg2} to: ${F}`);
-      }
       if (isZeroAtomOrTensor(subtract(F, arg2))) {
-        if (DEBUG) {
-          console.log(`binding METAA to ${get_binding(symbol(METAA))}`);
-          console.log(`binding METAB to ${get_binding(symbol(METAB))}`);
-          console.log(`binding METAX to ${get_binding(symbol(METAX))}`);
-          console.log(`comparing ${F} to: ${A}`);
-        }
         return true; // yes
       }
     }

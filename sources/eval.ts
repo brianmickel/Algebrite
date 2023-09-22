@@ -10,17 +10,23 @@ import {
   car,
   cdadr,
   cddr,
-  cdr, CONS,
+  cdr, 
+  CONS,
   Cons,
-  Constants, DEBUG, defs, DOUBLE, EVAL, INDEX, iscons,
+  Constants, 
+  defs, 
+  DOUBLE, 
+  EVAL,
+   INDEX, 
+   iscons,
   isdouble,
   ISINTEGER,
-  isNumericAtom, isrational,
+  isNumericAtom, 
+  isrational,
   issymbol,
   istensor,
   LAST,
   NIL,
-  noexpand,
   NUM,
   OPERATOR,
   PI,
@@ -116,10 +122,6 @@ export function Eval_sym(p1: Sym): U {
 
   // Evaluate symbol's binding
   let p2 = get_binding(p1);
-  if (DEBUG) {
-    console.log(`looked up: ${p1} which contains: ${p2}`);
-  }
-
   // differently from standard Lisp,
   // here the evaluation is not
   // one-step only, rather it keeps evaluating

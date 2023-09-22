@@ -28,8 +28,6 @@ import { divide, multiply } from './multiply';
 //   2) it's very compact
 //   3) it's a straighforward notation for roots of 1 and -1
 
-const DEBUG_CLOCKFORM = false;
-
 export function Eval_clock(p1: U) {
   return clockform(Eval(cadr(p1)));
 }
@@ -44,14 +42,5 @@ export function clockform(p1: U): U {
     Constants.negOne,
     divide(arg(p1), Constants.Pi())
   );
-  const multiplied = multiply(abs(p1), l);
-
-  if (DEBUG_CLOCKFORM) {
-    console.log(`clockform: abs of ${p1} : ${abs(p1)}`);
-    console.log(`clockform: arg of ${p1} : ${arg(p1)}`);
-    console.log(`clockform: divide : ${divide(arg(p1), Constants.Pi())}`);
-    console.log(`clockform: power : ${l}`);
-    console.log(`clockform: multiply : ${multiplied}`);
-  }
-  return multiplied;
+  return multiply(abs(p1), l);
 }

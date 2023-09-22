@@ -4,13 +4,12 @@ import {
   caddr,
   cadr,
   Constants,
-  DEBUG,
   issymbol,
   U
 } from '../runtime/defs';
 import { stop } from '../runtime/run';
 import { get_binding, set_binding } from '../runtime/symbol';
-import { integer, nativeInt } from './bignum';
+import { integer } from './bignum';
 import { Eval, evaluate_integer } from './eval';
 import { multiply } from './multiply';
 
@@ -54,12 +53,6 @@ export function Eval_product(p1: U) {
         set_binding(indexVariable, integer(i));
         const arg2 = Eval(body);
         const temp2 = multiply(temp, arg2);
-
-        if (DEBUG) {
-      console.log(`product - factor 1: ${arg2}`);
-      console.log(`product - factor 2: ${temp}`);
-      console.log(`product - result: ${temp2}`);
-        }
         temp = temp2;
     }
 

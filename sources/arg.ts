@@ -100,8 +100,6 @@ Notes
      automatic.
 */
 
-const DEBUG_ARG = false;
-
 export function Eval_arg(z: U) {
   return arg(Eval(cadr(z)));
 }
@@ -119,10 +117,9 @@ function yyarg(p1: U): U {
   }
 
   if (isnegativenumber(p1)) {
-    const pi =
-      isdouble(p1) || defs.evaluatingAsFloats
-        ? Constants.piAsDouble
-        : symbol(PI);
+    const pi = isdouble(p1) || defs.evaluatingAsFloats
+      ? Constants.piAsDouble
+      : symbol(PI);
     return negate(pi);
   }
 
@@ -147,13 +144,7 @@ function yyarg(p1: U): U {
   }
 
   if (ispower(p1) && isoneovertwo(caddr(p1))) {
-    const arg1 = arg(cadr(p1));
-    if (DEBUG_ARG) {
-      console.log(`arg of a sqrt: ${p1}`);
-      breakpoint;
-      console.log(` = 1/2 * ${arg1}`);
-    }
-    return multiply(arg1, caddr(p1));
+    return multiply(arg(cadr(p1)), caddr(p1));
   }
 
   if (ismultiply(p1)) {
@@ -161,29 +152,11 @@ function yyarg(p1: U): U {
     return p1.tail().map(arg).reduce(add, Constants.zero);
   }
 
+  // sum of terms
   if (isadd(p1)) {
-    // sum of terms
-    p1 = rect(p1);
-    const RE = real(p1);
-    const IM = imag(p1);
-    if (isZeroAtomOrTensor(RE)) {
-      if (isnegative(IM)) {
-        return negate(Constants.Pi());
-      } else {
-        return Constants.Pi();
-      }
-    } else {
-      const arg1 = arctan(divide(IM, RE));
-      if (isnegative(RE)) {
-        if (isnegative(IM)) {
-          return subtract(arg1, Constants.Pi()); // quadrant 1 -> 3
-        } else {
-          return add(arg1, Constants.Pi()); // quadrant 4 -> 2
-        }
-      }
-      return arg1;
-    }
+    return argAdd(p1);
   }
+
   if (!isZeroAtomOrTensor(get_binding(symbol(ASSUME_REAL_VARIABLES)))) {
     // if we assume all passed values are real
     return Constants.zero;
@@ -192,4 +165,25 @@ function yyarg(p1: U): U {
   // if we don't assume all passed values are real, all
   // we con do is to leave unexpressed
   return makeList(symbol(ARG), p1);
+}
+
+// arg when isadd(p1) == true
+function argAdd(p1: U): U {
+  p1 = rect(p1);
+  const RE = real(p1);
+  const IM = imag(p1);
+  if (isZeroAtomOrTensor(RE)) {
+    return isnegative(IM)
+      ? negate(Constants.Pi())
+      : Constants.Pi();
+  }
+
+  const arg1 = arctan(divide(IM, RE));
+  if (isnegative(RE)) {
+    return isnegative(IM)
+      ? subtract(arg1, Constants.Pi()) // quadrant 1 -> 3
+      : add(arg1, Constants.Pi()); // quadrant 4 -> 2
+  }
+
+  return arg1;
 }

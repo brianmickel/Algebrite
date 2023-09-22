@@ -33,8 +33,6 @@ Convert complex z to rectangular form
 
   Output:    Result on stack
 */
-const DEBUG_RECT = false;
-
 export function Eval_rect(p1: U) {
   return rect(Eval(cadr(p1)));
 }
@@ -42,21 +40,11 @@ export function Eval_rect(p1: U) {
 export function rect(p1: U): U {
   const input = p1;
 
-  if (DEBUG_RECT) {
-    console.log(`RECT of ${input}`);
-    console.log(
-      `any clock forms in : ${input} ? ${findPossibleClockForm(input, p1)}`
-    );
-  }
-
   // if we assume real variables, then the
   // rect of any symbol is the symbol itself
   // (note that 'i' is not a symbol, it's made of (-1)^(1/2))
   // otherwise we have to leave unevalled
   if (issymbol(p1)) {
-    if (DEBUG_RECT) {
-      console.log(` rect: simple symbol: ${input}`);
-    }
     if (!isZeroAtomOrTensor(get_binding(symbol(ASSUME_REAL_VARIABLES)))) {
       return p1;
     }
@@ -86,9 +74,6 @@ export function rect(p1: U): U {
     )
   ) {
     // no polar form?
-    if (DEBUG_RECT) {
-      console.log(` rect: simple symbol: ${input}`);
-    }
     return p1; // ib
   }
 
@@ -101,9 +86,6 @@ export function rect(p1: U): U {
   }
 
   if (isadd(p1)) {
-    if (DEBUG_RECT) {
-      console.log(` rect - ${input} is a sum `);
-    }
     return p1.tail().reduce((a: U, b: U) => add(a, rect(b)), Constants.zero);
   }
 
@@ -116,25 +98,5 @@ export function rect(p1: U): U {
     add(cosine(arg(p1)), multiply(Constants.imaginaryunit, sine(arg(p1))))
   );
 
-  if (DEBUG_RECT) {
-    console.log(` rect - ${input} is NOT a sum `);
-    console.log(` rect - ${input} abs: ${abs(p1)}`);
-    console.log(` rect - ${input} arg of ${p1} : ${p1}`);
-    console.log(` rect - ${input} cosine: ${cosine(arg(p1))}`);
-    console.log(` rect - ${input} sine: ${sine(arg(p1))}`);
-    console.log(
-      ` rect - ${input} i * sine: ${multiply(
-        Constants.imaginaryunit,
-        sine(arg(p1))
-      )}`
-    );
-    console.log(
-      ` rect - ${input} cos + i * sine: ${add(
-        cosine(arg(p1)),
-        multiply(Constants.imaginaryunit, sine(arg(p1)))
-      )}`
-    );
-    console.log(`rect of ${input} : ${result}`);
-  }
   return result;
 }

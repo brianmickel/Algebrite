@@ -2,7 +2,6 @@ import bigInt from 'big-integer';
 import {
   breakpoint,
   Constants,
-  DEBUG,
   defs,
   Double,
   DOUBLE,
@@ -172,8 +171,6 @@ ge = (a, b, len) ->
     return 0
 */
 export function add_numbers(p1: Num | Double, p2: Num | Double): Num | Double {
-  //if DEBUG then console.log("add_numbers adding numbers: " + print_list(stack[tos - 1]) + " and " + print_list(stack[tos - 2]))
-
   if (isrational(p1) && isrational(p2)) {
     return qadd(p1, p2);
   }
@@ -353,13 +350,7 @@ export function nativeInt(p1: U): number {
       }
       break;
     case DOUBLE:
-      if (DEBUG) {
-        console.log('popping integer but double is found');
-      }
       if (Math.floor(p1.d) === p1.d) {
-        if (DEBUG) {
-          console.log("...although it's an integer");
-        }
         n = p1.d;
       }
       break;

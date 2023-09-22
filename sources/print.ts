@@ -20,7 +20,6 @@ import {
   CONS,
   Constants,
   COS,
-  DEBUG,
   DEFINT,
   defs,
   DERIVATIVE,
@@ -195,11 +194,6 @@ function _print(p: U, passedPrintMode: string): string {
     p = cdr(p);
   }
 
-  if (DEBUG) {
-    console.log(
-      `emttedString from display: ${defs.stringsEmittedByUserPrintouts}`
-    );
-  }
   return accumulator;
 }
 
@@ -209,11 +203,6 @@ function rememberPrint(theString: string, theTypeOfPrint: string) {
 }
 
 export function print_str(s: string): string {
-  if (DEBUG) {
-    console.log(
-      `emttedString from print_str: ${defs.stringsEmittedByUserPrintouts}`
-    );
-  }
   return s;
 }
 
@@ -231,11 +220,6 @@ export function collectLatexStringFromReturnValue(p: BaseAtom): string {
   returnedString = returnedString.replace(/_/g, '\\_');
   defs.printMode = origPrintMode;
   defs.codeGen = originalCodeGen;
-  if (DEBUG) {
-    console.log(
-      `emttedString from collectLatexStringFromReturnValue: ${defs.stringsEmittedByUserPrintouts}`
-    );
-  }
   return returnedString;
 }
 
@@ -1170,12 +1154,6 @@ function print_PRODUCT_codegen(p: BaseAtom): string {
 
 function print_power(base: BaseAtom, exponent: BaseAtom) {
   let accumulator = '';
-
-  //breakpoint
-  if (DEBUG) {
-    console.log('power base: ' + base + ' ' + ' exponent: ' + exponent);
-  }
-
   // quick check is this is actually a square root.
   if (isoneovertwo(exponent)) {
     if (equaln(base as U, 2)) {
@@ -1514,11 +1492,6 @@ function print_factor(
     if (!defs.codeGen) {
       const parameters = caddr(p);
       accumulator += print_str('function ');
-      if (DEBUG) {
-        console.log(
-          `emittedString from print_factor ${defs.stringsEmittedByUserPrintouts}`
-        );
-      }
       const returned = print_list(parameters);
       accumulator += returned;
       accumulator += print_str(' -> ');

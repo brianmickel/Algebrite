@@ -1,7 +1,6 @@
 import {
   car,
   cdr,
-  DEBUG,
   defs,
   iscons,
   NIL,
@@ -58,9 +57,6 @@ export function Eval_pattern(p1: U) {
   // untracked reference
   let stringKey = 'template: ' + print_list(firstArgument);
   stringKey += ' tests: ' + print_list(thirdArgument);
-  if (DEBUG) {
-    console.log(`pattern stringkey: ${stringKey}`);
-  }
 
   const patternPosition = defs.userSimplificationsInStringForm.indexOf(
     stringKey
@@ -71,9 +67,6 @@ export function Eval_pattern(p1: U) {
     defs.userSimplificationsInStringForm.push(stringKey);
     defs.userSimplificationsInListForm.push(cdr(p1));
   } else {
-    if (DEBUG) {
-      console.log(`pattern already exists, replacing. ${cdr(p1)}`);
-    }
     defs.userSimplificationsInStringForm[patternPosition] = stringKey;
     defs.userSimplificationsInListForm[patternPosition] = cdr(p1);
   }

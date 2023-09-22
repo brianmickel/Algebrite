@@ -7,7 +7,6 @@ import {
   car,
   cdr,
   Constants,
-  DEBUG,
   DOUBLE,
   Double,
   FLOATF,
@@ -43,7 +42,6 @@ import { zzfloat } from './float';
 import { guess } from './guess';
 import { multiply } from './multiply';
 
-const DEBUG_IS = false;
 
 // this routine is a simple check on whether we have
 // a basic zero in our hands. It doesn't perform any
@@ -345,12 +343,6 @@ function ispolyfactoredorexpandedform_factor(p: U, x: U): boolean {
   if (ismultiply(p)) {
     return p.tail().every((el) => {
       const bool = ispolyfactoredorexpandedform_power(el, x);
-      if (DEBUG) {
-        console.log(`ispolyfactoredorexpandedform_factor testing ${el}`);
-        if (bool) {
-          console.log(`... tested negative:${el}`);
-        }
-      }
       return bool;
     });
   } else {
@@ -360,25 +352,8 @@ function ispolyfactoredorexpandedform_factor(p: U, x: U): boolean {
 
 function ispolyfactoredorexpandedform_power(p: U, x: U): boolean {
   if (ispower(p)) {
-    if (DEBUG) {
-      console.log(
-        'ispolyfactoredorexpandedform_power (isposint(caddr(p)) ' +
-          (isposint(caddr(p)),
-          DEBUG
-            ? console.log(
-                'ispolyfactoredorexpandedform_power ispolyexpandedform_expr(cadr(p), x)) ' +
-                  ispolyexpandedform_expr(cadr(p), x)
-              )
-            : undefined)
-      );
-    }
     return isposint(caddr(p)) && ispolyexpandedform_expr(cadr(p), x);
   } else {
-    if (DEBUG) {
-      console.log(
-        `ispolyfactoredorexpandedform_power not a power, testing if this is exp form: ${p}`
-      );
-    }
     return ispolyexpandedform_expr(p, x);
   }
 }
@@ -430,16 +405,8 @@ function hasNegativeRationalExponent(p: BaseAtom): boolean {
     isrational(car(cdr(cdr(p)))) &&
     isnegativenumber(car(cdr(p)))
   ) {
-    if (DEBUG_IS) {
-      console.log(`hasNegativeRationalExponent: ${p} has imaginary component`);
-    }
     return true;
   } else {
-    if (DEBUG_IS) {
-      console.log(
-        `hasNegativeRationalExponent: ${p} has NO imaginary component`
-      );
-    }
     return false;
   }
 }
@@ -463,14 +430,8 @@ export function isimaginarynumber(p: BaseAtom): boolean {
     equal(p as U, Constants.imaginaryunit) ||
     hasNegativeRationalExponent(caddr(p))
   ) {
-    if (DEBUG_IS) {
-      console.log(`isimaginarynumber: ${p} is imaginary number`);
-    }
     return true;
   } else {
-    if (DEBUG_IS) {
-      console.log(`isimaginarynumber: ${p} isn't an imaginary number`);
-    }
     return false;
   }
 }
@@ -486,9 +447,6 @@ export function iscomplexnumberdouble(p: BaseAtom): boolean {
 }
 
 export function iscomplexnumber(p: U): boolean {
-  if (DEBUG_IS) {
-    breakpoint;
-  }
   if (
     (isadd(p) &&
       length(p) === 3 &&
@@ -496,14 +454,8 @@ export function iscomplexnumber(p: U): boolean {
       isimaginarynumber(caddr(p))) ||
     isimaginarynumber(p)
   ) {
-    if (DEBUG) {
-      console.log(`iscomplexnumber: ${p} is imaginary number`);
-    }
     return true;
   } else {
-    if (DEBUG) {
-      console.log(`iscomplexnumber: ${p} is imaginary number`);
-    }
     return false;
   }
 }
